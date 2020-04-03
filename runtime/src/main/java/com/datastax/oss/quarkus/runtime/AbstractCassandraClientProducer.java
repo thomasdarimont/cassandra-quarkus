@@ -27,6 +27,7 @@ import com.datastax.oss.driver.internal.core.config.typesafe.DefaultProgrammatic
 import com.datastax.oss.driver.internal.core.util.concurrent.CompletableFutures;
 import com.datastax.oss.quarkus.config.CassandraClientConfig;
 import com.datastax.oss.quarkus.config.CassandraClientConnectionConfig;
+import com.datastax.oss.quarkus.runtime.metrics.MetricsConfig;
 import com.typesafe.config.ConfigFactory;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.concurrent.CompletionStage;
@@ -34,9 +35,14 @@ import java.util.concurrent.CompletionStage;
 public abstract class AbstractCassandraClientProducer {
 
   private CassandraClientConfig config;
+  private MetricsConfig metricsConfig;
 
   public void setCassandraClientConfig(CassandraClientConfig config) {
     this.config = config;
+  }
+
+  public void setMetricsConfig(MetricsConfig metricsConfig) {
+    this.metricsConfig = metricsConfig;
   }
 
   private ProgrammaticDriverConfigLoaderBuilder createDriverConfigLoader() {
@@ -62,11 +68,25 @@ public abstract class AbstractCassandraClientProducer {
     return config;
   }
 
-  public CqlSession createCassandraClient(CassandraClientConfig config) {
+  MetricsConfig getMetricsConfig() {
+    return metricsConfig;
+  }
+
+  public CqlSession createCassandraClient(
+      CassandraClientConfig config, MetricsConfig metricsConfig) {
     ProgrammaticDriverConfigLoaderBuilder configLoaderBuilder = createDriverConfigLoader();
     configureConnectionSettings(configLoaderBuilder, config.cassandraClientConnectionConfig);
+    configureMetricsSettings(configLoaderBuilder, metricsConfig);
     CqlSessionBuilder builder = CqlSession.builder().withConfigLoader(configLoaderBuilder.build());
     return builder.build();
+  }
+
+  private void configureMetricsSettings(
+      ProgrammaticDriverConfigLoaderBuilder configLoaderBuilder, MetricsConfig metricsConfig) {
+    configLoaderBuilder.withStringList(
+        DefaultDriverOption.METRICS_NODE_ENABLED, metricsConfig.metricsNodeEnabled);
+    configLoaderBuilder.withStringList(
+        DefaultDriverOption.METRICS_SESSION_ENABLED, metricsConfig.metricsSessionEnabled);
   }
 
   private void configureConnectionSettings(

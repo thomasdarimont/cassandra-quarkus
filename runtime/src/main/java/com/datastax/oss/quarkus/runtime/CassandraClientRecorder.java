@@ -17,6 +17,7 @@ package com.datastax.oss.quarkus.runtime;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.quarkus.config.CassandraClientConfig;
+import com.datastax.oss.quarkus.runtime.metrics.MetricsConfig;
 import io.quarkus.arc.Arc;
 import io.quarkus.arc.runtime.BeanContainerListener;
 import io.quarkus.runtime.RuntimeValue;
@@ -44,5 +45,11 @@ public class CassandraClientRecorder {
 
   public RuntimeValue<CqlSession> getClient() {
     return new RuntimeValue<>(Arc.container().instance(CqlSession.class, defaultName()).get());
+  }
+
+  public void configureMetrics(MetricsConfig metricsConfig) {
+    AbstractCassandraClientProducer producer =
+        Arc.container().instance(AbstractCassandraClientProducer.class).get();
+    producer.setMetricsConfig(metricsConfig);
   }
 }
