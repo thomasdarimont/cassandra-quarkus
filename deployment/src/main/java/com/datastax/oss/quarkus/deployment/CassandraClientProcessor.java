@@ -63,6 +63,7 @@ import io.quarkus.gizmo.ResultHandle;
 import io.quarkus.smallrye.health.deployment.spi.HealthBuildItem;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
@@ -186,7 +187,7 @@ class CassandraClientProcessor {
 
   @Record(RUNTIME_INIT)
   @BuildStep
-  void configureRuntimePropertiesAndBuildClient(
+  void configureRuntimeProperties(
       CassandraClientRecorder recorder,
       CassandraClientConfig cassandraRuntimeConfig,
       CassandraClientBuildTimeConfig cassandraBuildTimeConfig) {
@@ -197,7 +198,7 @@ class CassandraClientProcessor {
               cassandraBuildTimeConfig.metricsNodeEnabled,
               cassandraBuildTimeConfig.metricsSessionEnabled));
     } else {
-      recorder.configureMetrics(new MetricsConfig());
+      recorder.configureMetrics(new MetricsConfig(Optional.empty(), Optional.empty()));
     }
   }
 
