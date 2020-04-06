@@ -18,8 +18,11 @@ package com.datastax.oss.quarkus.runtime.metrics;
 import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.BYTES_RECEIVED;
 import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.BYTES_SENT;
 import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.CONNECTED_NODES;
+import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.CQL_CLIENT_TIMEOUTS;
+import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.CQL_PREPARED_CACHE_SIZE;
 import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.CQL_REQUESTS;
 import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.THROTTLING_DELAY;
+import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.THROTTLING_ERRORS;
 import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.THROTTLING_QUEUE_SIZE;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,6 +31,7 @@ import com.datastax.oss.quarkus.CassandraTestBase;
 import io.quarkus.test.QuarkusUnitTest;
 import io.quarkus.test.common.QuarkusTestResource;
 import javax.inject.Inject;
+import org.eclipse.microprofile.metrics.Counter;
 import org.eclipse.microprofile.metrics.Gauge;
 import org.eclipse.microprofile.metrics.Metered;
 import org.eclipse.microprofile.metrics.Metric;
@@ -62,11 +66,14 @@ public class CassandraMetricsTest {
 
     // then
     assertThat(getGaugeValue(CONNECTED_NODES.getPath())).isEqualTo(1L);
+    assertThat(getGaugeValue(THROTTLING_QUEUE_SIZE.getPath())).isEqualTo(0L);
     assertThat(getMeteredValue(BYTES_RECEIVED.getPath()).getCount()).isGreaterThan(0L);
     assertThat(getMeteredValue(BYTES_SENT.getPath()).getCount()).isGreaterThan(0L);
     assertThat(getMeteredValue(CQL_REQUESTS.getPath()).getCount()).isEqualTo(1L);
-    assertThat(getGaugeValue(THROTTLING_QUEUE_SIZE.getPath())).isEqualTo(0L);
     assertThat(getMeteredValue(THROTTLING_DELAY.getPath()).getCount()).isEqualTo(0L);
+    assertThat(getCounterValue(CQL_CLIENT_TIMEOUTS.getPath())).isEqualTo(0L);
+    assertThat(getCounterValue(THROTTLING_ERRORS.getPath())).isEqualTo(0L);
+    assertThat(getGaugeValue(CQL_PREPARED_CACHE_SIZE.getPath())).isEqualTo(0L);
   }
 
   @SuppressWarnings("unchecked")
@@ -80,5 +87,11 @@ public class CassandraMetricsTest {
     MetricID metricID = new MetricID(metricName);
     Metric metric = registry.getMetrics().get(metricID);
     return ((Metered) metric);
+  }
+
+  private long getCounterValue(String metricName) {
+    MetricID metricID = new MetricID(metricName);
+    Metric metric = registry.getMetrics().get(metricID);
+    return ((Counter) metric).getCount();
   }
 }

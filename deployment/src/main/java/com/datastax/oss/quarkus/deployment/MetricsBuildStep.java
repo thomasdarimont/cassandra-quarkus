@@ -18,11 +18,15 @@ package com.datastax.oss.quarkus.deployment;
 import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.BYTES_RECEIVED;
 import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.BYTES_SENT;
 import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.CONNECTED_NODES;
+import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.CQL_CLIENT_TIMEOUTS;
+import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.CQL_PREPARED_CACHE_SIZE;
 import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.CQL_REQUESTS;
 import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.THROTTLING_DELAY;
+import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.THROTTLING_ERRORS;
 import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.THROTTLING_QUEUE_SIZE;
 
 import com.datastax.oss.driver.api.core.metrics.SessionMetric;
+import com.datastax.oss.quarkus.runtime.metrics.CassandraCounter;
 import com.datastax.oss.quarkus.runtime.metrics.CassandraGauge;
 import com.datastax.oss.quarkus.runtime.metrics.CassandraMetered;
 import io.quarkus.deployment.Capabilities;
@@ -95,6 +99,31 @@ public class MetricsBuildStep {
             .withType(MetricType.GAUGE)
             .build());
 
+    supportedSessionMetrics.put(
+        CQL_CLIENT_TIMEOUTS,
+        Metadata.builder()
+            .withName(CQL_CLIENT_TIMEOUTS.getPath())
+            .withDescription("The number of CQL requests that timed out.")
+            .withType(MetricType.COUNTER)
+            .build());
+
+    supportedSessionMetrics.put(
+        THROTTLING_ERRORS,
+        Metadata.builder()
+            .withName(THROTTLING_ERRORS.getPath())
+            .withDescription(
+                "The number of times a request was rejected with a RequestThrottlingException.")
+            .withType(MetricType.COUNTER)
+            .build());
+
+    supportedSessionMetrics.put(
+        CQL_PREPARED_CACHE_SIZE,
+        Metadata.builder()
+            .withName(CQL_PREPARED_CACHE_SIZE.getPath())
+            .withDescription("The size of the driver-side cache of CQL prepared statements.")
+            .withType(MetricType.GAUGE)
+            .build());
+
     if (buildTimeConfig.metricsEnabled && capabilities.isCapabilityPresent(Capabilities.METRICS)) {
       produceMetrics(metrics, supportedSessionMetrics, buildTimeConfig.metricsSessionEnabled);
     }
@@ -124,6 +153,9 @@ public class MetricsBuildStep {
     } else if (typeRaw.equals(MetricType.METERED)) {
       metrics.produce(
           new MetricBuildItem(metadata, new CassandraMetered(sessionMetric), true, CONFIG_ROOT));
+    } else if (typeRaw.equals(MetricType.COUNTER)) {
+      metrics.produce(
+          new MetricBuildItem(metadata, new CassandraCounter(sessionMetric), true, CONFIG_ROOT));
     }
   }
 }
