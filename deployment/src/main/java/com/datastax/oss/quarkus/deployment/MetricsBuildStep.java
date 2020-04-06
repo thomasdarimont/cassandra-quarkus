@@ -18,6 +18,9 @@ package com.datastax.oss.quarkus.deployment;
 import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.BYTES_RECEIVED;
 import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.BYTES_SENT;
 import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.CONNECTED_NODES;
+import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.CQL_REQUESTS;
+import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.THROTTLING_DELAY;
+import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.THROTTLING_QUEUE_SIZE;
 
 import com.datastax.oss.driver.api.core.metrics.SessionMetric;
 import com.datastax.oss.quarkus.runtime.metrics.CassandraGauge;
@@ -65,6 +68,30 @@ public class MetricsBuildStep {
             .withName(CONNECTED_NODES.getPath())
             .withDescription(
                 "The number of nodes to which the driver has at least one active connection")
+            .withType(MetricType.GAUGE)
+            .build());
+
+    supportedSessionMetrics.put(
+        CQL_REQUESTS,
+        Metadata.builder()
+            .withName(CQL_REQUESTS.getPath())
+            .withDescription("The throughput and latency percentiles of CQL requests.")
+            .withType(MetricType.METERED)
+            .build());
+
+    supportedSessionMetrics.put(
+        THROTTLING_DELAY,
+        Metadata.builder()
+            .withName(THROTTLING_DELAY.getPath())
+            .withDescription("How long requests are being throttled.")
+            .withType(MetricType.METERED)
+            .build());
+
+    supportedSessionMetrics.put(
+        THROTTLING_QUEUE_SIZE,
+        Metadata.builder()
+            .withName(THROTTLING_QUEUE_SIZE.getPath())
+            .withDescription("The size of the throttling queue.")
             .withType(MetricType.GAUGE)
             .build());
 

@@ -18,6 +18,9 @@ package com.datastax.oss.quarkus.runtime.metrics;
 import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.BYTES_RECEIVED;
 import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.BYTES_SENT;
 import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.CONNECTED_NODES;
+import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.CQL_REQUESTS;
+import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.THROTTLING_DELAY;
+import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.THROTTLING_QUEUE_SIZE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.datastax.oss.driver.api.core.CqlSession;
@@ -54,9 +57,16 @@ public class CassandraMetricsTest {
 
   @Test
   void testMetricsInitialization() {
+    // when
+    cqlSession.execute("select * from system.local");
+
+    // then
     assertThat(getGaugeValue(CONNECTED_NODES.getPath())).isEqualTo(1L);
     assertThat(getMeteredValue(BYTES_RECEIVED.getPath()).getCount()).isGreaterThan(0L);
     assertThat(getMeteredValue(BYTES_SENT.getPath()).getCount()).isGreaterThan(0L);
+    assertThat(getMeteredValue(CQL_REQUESTS.getPath()).getCount()).isEqualTo(1L);
+    assertThat(getGaugeValue(THROTTLING_QUEUE_SIZE.getPath())).isEqualTo(0L);
+    assertThat(getMeteredValue(THROTTLING_DELAY.getPath()).getCount()).isEqualTo(0L);
   }
 
   @SuppressWarnings("unchecked")
