@@ -15,19 +15,55 @@
  */
 package com.datastax.oss.quarkus.runtime.metrics;
 
+import com.codahale.metrics.Meter;
 import com.codahale.metrics.Metric;
 import com.datastax.oss.driver.api.core.metrics.SessionMetric;
-import org.eclipse.microprofile.metrics.Gauge;
+import org.eclipse.microprofile.metrics.Metered;
 
-public class CassandraGauge implements Gauge<Long> {
+public class CassandraMetered implements Metered {
   private SessionMetric sessionMetric;
 
-  // no-args constructor needed for serialization
-  public CassandraGauge() {}
+  public CassandraMetered() {}
 
-  // node metrics not supported
-  public CassandraGauge(SessionMetric sessionMetric) {
+  public CassandraMetered(SessionMetric sessionMetric) {
+
     this.sessionMetric = sessionMetric;
+  }
+
+  @Override
+  public long getCount() {
+    return getMeter().getCount();
+  }
+
+  @Override
+  public double getFifteenMinuteRate() {
+    return getMeter().getFifteenMinuteRate();
+  }
+
+  @Override
+  public double getFiveMinuteRate() {
+    return getMeter().getFiveMinuteRate();
+  }
+
+  @Override
+  public double getMeanRate() {
+    return getMeter().getMeanRate();
+  }
+
+  @Override
+  public double getOneMinuteRate() {
+    return getMeter().getOneMinuteRate();
+  }
+
+  private Meter getMeter() {
+    Metric metrics = MetricsFinder.getMetrics(sessionMetric);
+    if (!(metrics instanceof Meter)) {
+      throw new IllegalArgumentException(
+          String.format(
+              "The metric for metric name: %s should be of %s type, but is: %s.",
+              sessionMetric, Meter.class.getName(), metrics.getClass().getName()));
+    }
+    return (Meter) metrics;
   }
 
   public SessionMetric getSessionMetric() {
@@ -36,21 +72,5 @@ public class CassandraGauge implements Gauge<Long> {
 
   public void setSessionMetric(SessionMetric sessionMetric) {
     this.sessionMetric = sessionMetric;
-  }
-
-  @Override
-  @SuppressWarnings("unchecked")
-  public Long getValue() {
-    Metric metrics = MetricsFinder.getMetrics(sessionMetric);
-    if (!(metrics instanceof com.codahale.metrics.Gauge)) {
-      throw new IllegalArgumentException(
-          String.format(
-              "The metric for metric name: %s should be of %s type, but is: %s.",
-              sessionMetric,
-              com.codahale.metrics.Gauge.class.getName(),
-              metrics.getClass().getName()));
-    }
-
-    return ((com.codahale.metrics.Gauge<Number>) metrics).getValue().longValue();
   }
 }

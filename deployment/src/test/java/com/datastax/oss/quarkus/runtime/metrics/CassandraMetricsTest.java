@@ -15,6 +15,8 @@
  */
 package com.datastax.oss.quarkus.runtime.metrics;
 
+import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.BYTES_RECEIVED;
+import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.BYTES_SENT;
 import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.CONNECTED_NODES;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,6 +26,7 @@ import io.quarkus.test.QuarkusUnitTest;
 import io.quarkus.test.common.QuarkusTestResource;
 import javax.inject.Inject;
 import org.eclipse.microprofile.metrics.Gauge;
+import org.eclipse.microprofile.metrics.Metered;
 import org.eclipse.microprofile.metrics.Metric;
 import org.eclipse.microprofile.metrics.MetricID;
 import org.eclipse.microprofile.metrics.MetricRegistry;
@@ -52,16 +55,20 @@ public class CassandraMetricsTest {
   @Test
   void testMetricsInitialization() {
     assertThat(getGaugeValue(CONNECTED_NODES.getPath())).isEqualTo(1L);
+    assertThat(getMeteredValue(BYTES_RECEIVED.getPath()).getCount()).isGreaterThan(0L);
+    assertThat(getMeteredValue(BYTES_SENT.getPath()).getCount()).isGreaterThan(0L);
   }
 
   @SuppressWarnings("unchecked")
   private Long getGaugeValue(String metricName) {
     MetricID metricID = new MetricID(metricName);
     Metric metric = registry.getMetrics().get(metricID);
-
-    if (metric == null) {
-      return null;
-    }
     return ((Gauge<Long>) metric).getValue();
+  }
+
+  private Metered getMeteredValue(String metricName) {
+    MetricID metricID = new MetricID(metricName);
+    Metric metric = registry.getMetrics().get(metricID);
+    return ((Metered) metric);
   }
 }

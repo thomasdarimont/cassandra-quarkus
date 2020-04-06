@@ -15,10 +15,13 @@
  */
 package com.datastax.oss.quarkus.deployment;
 
+import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.BYTES_RECEIVED;
+import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.BYTES_SENT;
 import static com.datastax.oss.driver.api.core.metrics.DefaultSessionMetric.CONNECTED_NODES;
 
 import com.datastax.oss.driver.api.core.metrics.SessionMetric;
 import com.datastax.oss.quarkus.runtime.metrics.CassandraGauge;
+import com.datastax.oss.quarkus.runtime.metrics.CassandraMetered;
 import io.quarkus.deployment.Capabilities;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
@@ -39,6 +42,22 @@ public class MetricsBuildStep {
       BuildProducer<MetricBuildItem> metrics,
       Capabilities capabilities) {
     Map<SessionMetric, Metadata> supportedSessionMetrics = new HashedMap();
+
+    supportedSessionMetrics.put(
+        BYTES_SENT,
+        Metadata.builder()
+            .withName(BYTES_SENT.getPath())
+            .withDescription("The number and rate of bytes sent for the entire session.")
+            .withType(MetricType.METERED)
+            .build());
+
+    supportedSessionMetrics.put(
+        BYTES_RECEIVED,
+        Metadata.builder()
+            .withName(BYTES_RECEIVED.getPath())
+            .withDescription("The number and rate of bytes received for the entire session.")
+            .withType(MetricType.METERED)
+            .build());
 
     supportedSessionMetrics.put(
         CONNECTED_NODES,
@@ -75,6 +94,9 @@ public class MetricsBuildStep {
     if (typeRaw.equals(MetricType.GAUGE)) {
       metrics.produce(
           new MetricBuildItem(metadata, new CassandraGauge(sessionMetric), true, CONFIG_ROOT));
+    } else if (typeRaw.equals(MetricType.METERED)) {
+      metrics.produce(
+          new MetricBuildItem(metadata, new CassandraMetered(sessionMetric), true, CONFIG_ROOT));
     }
   }
 }
