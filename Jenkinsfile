@@ -88,7 +88,6 @@ pipeline {
   environment {
     OS_VERSION = 'ubuntu/bionic64/java-driver'
     JABBA_SHELL = '/home/jenkins/.jabba/jabba.sh'
-    JABBA_VERSION = "${params.CI_SCHEDULE_JABBA_VERSION == 'DO-NOT-CHANGE-THIS-SELECTION' ? params.ADHOC_BUILD_AND_EXECUTE_TESTS_JABBA_VERSION : params.CI_SCHEDULE_JABBA_VERSION}"
   }
 
   stages {
@@ -99,7 +98,6 @@ pipeline {
       when {
         beforeAgent true
         allOf {
-          expression { params.CI_SCHEDULE_JABBA_VERSION == 'DO-NOT-CHANGE-THIS-SELECTION' }
           not { buildingTag() }
         }
       }
@@ -148,6 +146,6 @@ pipeline {
             }
           }
         }
-      }
     }
+  }
 }
