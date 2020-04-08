@@ -20,9 +20,6 @@ def initializeEnvironment() {
 
   sh label: 'Display Java and environment information',script: '''#!/bin/bash -le
     # Load CCM environment variables
-    set -o allexport
-    . ${HOME}/environment.txt
-    set +o allexport
 
     . ${JABBA_SHELL}
     jabba use ${JABBA_VERSION}
@@ -47,10 +44,7 @@ def buildQuarkusExtension(jabbaVersion) {
 def executeTests() {
   sh label: 'Execute tests', script: '''#!/bin/bash -le
     # Load CCM environment variables
-    set -o allexport
-    . ${HOME}/environment.txt
-    set +o allexport
-
+    
     . ${JABBA_SHELL}
     jabba use ${JABBA_VERSION}
 
