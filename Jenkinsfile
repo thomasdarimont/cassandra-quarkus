@@ -8,7 +8,7 @@ def initializeEnvironment() {
   env.GITHUB_BRANCH_URL = "${GITHUB_PROJECT_URL}/tree/${env.BRANCH_NAME}"
   env.GITHUB_COMMIT_URL = "${GITHUB_PROJECT_URL}/commit/${env.GIT_COMMIT}"
 
-  env.MAVEN_HOME = "${env.HOME}/.mvn/apache-maven-3.3.9"
+  env.MAVEN_HOME = "${env.HOME}/.mvn/apache-maven-3.6.0"
   env.PATH = "${env.MAVEN_HOME}/bin:${env.PATH}"
   env.JAVA_HOME = sh(label: 'Get JAVA_HOME',script: '''#!/bin/bash -le
     . ${JABBA_SHELL}
@@ -26,7 +26,6 @@ def initializeEnvironment() {
 
     java -version
     mvn -v
-    ls -ltr ${env.HOME}/.mvn/
     printenv | sort
   '''
 }
