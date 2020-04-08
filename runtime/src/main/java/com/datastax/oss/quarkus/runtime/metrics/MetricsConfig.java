@@ -20,31 +20,18 @@ import java.util.List;
 import java.util.Optional;
 
 public class MetricsConfig {
-  public List<String> metricsNodeEnabled;
   public List<String> metricsSessionEnabled;
 
   // no-args constructor needed for serialization
   public MetricsConfig() {}
 
-  public MetricsConfig(
-      Optional<List<String>> metricsNodeEnabled, Optional<List<String>> metricsSessionEnabled) {
+  public MetricsConfig(Optional<List<String>> metricsSessionEnabled) {
 
-    this(
-        metricsNodeEnabled.orElse(Collections.emptyList()),
-        metricsSessionEnabled.orElse(Collections.emptyList()));
+    this(metricsSessionEnabled.orElse(Collections.emptyList()));
   }
 
-  private MetricsConfig(List<String> metricsNodeEnabled, List<String> metricsSessionEnabled) {
-    this.metricsNodeEnabled = Collections.unmodifiableList(metricsNodeEnabled);
+  private MetricsConfig(List<String> metricsSessionEnabled) {
     this.metricsSessionEnabled = Collections.unmodifiableList(metricsSessionEnabled);
-  }
-
-  public List<String> getMetricsNodeEnabled() {
-    return metricsNodeEnabled;
-  }
-
-  public void setMetricsNodeEnabled(List<String> metricsNodeEnabled) {
-    this.metricsNodeEnabled = metricsNodeEnabled;
   }
 
   public List<String> getMetricsSessionEnabled() {

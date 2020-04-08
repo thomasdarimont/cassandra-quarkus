@@ -84,8 +84,6 @@ public abstract class AbstractCassandraClientProducer {
   private void configureMetricsSettings(
       ProgrammaticDriverConfigLoaderBuilder configLoaderBuilder, MetricsConfig metricsConfig) {
     configLoaderBuilder.withStringList(
-        DefaultDriverOption.METRICS_NODE_ENABLED, metricsConfig.metricsNodeEnabled);
-    configLoaderBuilder.withStringList(
         DefaultDriverOption.METRICS_SESSION_ENABLED, metricsConfig.metricsSessionEnabled);
   }
 

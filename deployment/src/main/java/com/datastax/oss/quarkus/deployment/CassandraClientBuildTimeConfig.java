@@ -40,12 +40,4 @@ public class CassandraClientBuildTimeConfig {
    */
   @ConfigItem(name = "metrics.session-enabled")
   public Optional<List<String>> metricsSessionEnabled;
-
-  /**
-   * List of enabled node-level metrics. They will be taken into account only, if metrics.enabled
-   * set to true. If not set, it will default to empty list. For more information, please see
-   * java-driver reference.conf.
-   */
-  @ConfigItem(name = "metrics.node-enabled", defaultValue = "")
-  public Optional<List<String>> metricsNodeEnabled;
 }

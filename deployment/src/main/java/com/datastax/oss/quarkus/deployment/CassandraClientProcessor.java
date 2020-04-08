@@ -193,12 +193,9 @@ class CassandraClientProcessor {
       CassandraClientBuildTimeConfig cassandraBuildTimeConfig) {
     recorder.configureRuntimeProperties(cassandraRuntimeConfig);
     if (cassandraBuildTimeConfig.metricsEnabled) {
-      recorder.configureMetrics(
-          new MetricsConfig(
-              cassandraBuildTimeConfig.metricsNodeEnabled,
-              cassandraBuildTimeConfig.metricsSessionEnabled));
+      recorder.configureMetrics(new MetricsConfig(cassandraBuildTimeConfig.metricsSessionEnabled));
     } else {
-      recorder.configureMetrics(new MetricsConfig(Optional.empty(), Optional.empty()));
+      recorder.configureMetrics(new MetricsConfig(Optional.empty()));
     }
   }
 
