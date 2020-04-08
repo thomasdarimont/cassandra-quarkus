@@ -26,6 +26,7 @@ def initializeEnvironment() {
 
     java -version
     mvn -v
+    ls -ltr "${env.HOME}/.mvn/"
     printenv | sort
   '''
 }
