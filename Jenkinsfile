@@ -66,6 +66,7 @@ def executeTestsNative() {
     
     . ${JABBA_SHELL}
     jabba use ${JABBA_VERSION}
+    jabba use ${GRAALVM_VERSION}
 
     if [ "${JABBA_VERSION}" != "1.8" ]; then
       SKIP_JAVADOCS=true
@@ -121,6 +122,7 @@ pipeline {
         environment {
           // Per-commit builds are only going to run against JDK8
           JABBA_VERSION = '1.8'
+          GRAALVM_VERSION = 'graalvm@19.3.1'
         }
 
         stages {
