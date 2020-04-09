@@ -41,25 +41,6 @@ def buildQuarkusExtension(jabbaVersion) {
   }
 }
 
-def executeTests() {
-  sh label: 'Execute tests', script: '''#!/bin/bash -le
-    # Load CCM environment variables
-    
-    . ${JABBA_SHELL}
-    jabba use ${JABBA_VERSION}
-
-    if [ "${JABBA_VERSION}" != "1.8" ]; then
-      SKIP_JAVADOCS=true
-    else
-      SKIP_JAVADOCS=false
-    fi
-
-    printenv | sort
-    
-    mvn -B -V verify -Dmaven.javadoc.skip=${SKIP_JAVADOCS}
-  '''
-}
-
 def executeTestsNative() {
   sh label: 'Execute tests Native', script: '''#!/bin/bash -le
     # Load CCM environment variables
@@ -135,24 +116,6 @@ pipeline {
           stage('Build-Quarkus-Extension') {
             steps {
               buildQuarkusExtension(env.JABBA_VERSION)
-            }
-          }
-          stage('Execute-Tests') {
-            steps {
-              catchError {
-                executeTests()
-              }
-            }
-            post {
-              always {
-                /*
-                 * Empty results are possible
-                 *
-                 *  - Build failures during mvn verify may exist so report may not be available
-                 */
-                junit testResults: '**/target/surefire-reports/TEST-*.xml', allowEmptyResults: true
-                junit testResults: '**/target/failsafe-reports/TEST-*.xml', allowEmptyResults: true
-              }
             }
           }
           stage('Execute-Tests-Native') {
