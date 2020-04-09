@@ -46,7 +46,6 @@ def executeTestsNative() {
     # Load CCM environment variables
     
     . ${JABBA_SHELL}
-    jabba use ${JABBA_VERSION}
     jabba use ${GRAALVM_VERSION}
 
     if [ "${JABBA_VERSION}" != "1.8" ]; then
