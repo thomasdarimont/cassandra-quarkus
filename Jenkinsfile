@@ -41,7 +41,7 @@ def buildQuarkusExtension(jabbaVersion) {
   }
 }
 
-def executeTests(nativeProfile) {
+def executeTests() {
   sh label: 'Execute tests', script: '''#!/bin/bash -le
     # Load CCM environment variables
     
@@ -56,11 +56,26 @@ def executeTests(nativeProfile) {
 
     printenv | sort
     
-    if(nativeProfile) {
-      mvn -B -V verify -Dnative -Dmaven.javadoc.skip=${SKIP_JAVADOCS}
-    } else {
-      mvn -B -V verify -Dmaven.javadoc.skip=${SKIP_JAVADOCS}
-    }
+    mvn -B -V verify -Dmaven.javadoc.skip=${SKIP_JAVADOCS}
+  '''
+}
+
+def executeTestsNative() {
+  sh label: 'Execute tests Native', script: '''#!/bin/bash -le
+    # Load CCM environment variables
+    
+    . ${JABBA_SHELL}
+    jabba use ${JABBA_VERSION}
+
+    if [ "${JABBA_VERSION}" != "1.8" ]; then
+      SKIP_JAVADOCS=true
+    else
+      SKIP_JAVADOCS=false
+    fi
+
+    printenv | sort
+    
+    mvn -B -V verify -Dnative -Dmaven.javadoc.skip=${SKIP_JAVADOCS}
   '''
 }
 
@@ -123,7 +138,7 @@ pipeline {
           stage('Execute-Tests') {
             steps {
               catchError {
-                executeTests(false)
+                executeTests()
               }
             }
             post {
@@ -141,7 +156,7 @@ pipeline {
           stage('Execute-Tests-Native') {
             steps {
               catchError {
-                executeTests(true)
+                executeTestsNative()
               }
             }
             post {
