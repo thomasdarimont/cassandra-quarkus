@@ -26,7 +26,7 @@ public class CassandraTestBase implements QuarkusTestResourceLifecycleManager {
 
   @Override
   public Map<String, String> start() {
-    cassandraContainer = new CassandraContainer<>();
+    cassandraContainer = new CassandraContainer<>().withConfigurationOverride("test-config");
     cassandraContainer.setWaitStrategy(new CassandraQueryWaitStrategy());
 
     // start the container
