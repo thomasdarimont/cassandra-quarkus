@@ -160,9 +160,9 @@ USING_G1=$?
 # The example HEAP_NEWSIZE assumes a modern 8-core+ machine for decent pause
 # times. If in doubt, and if you do not particularly want to tweak, go with
 # 100 MB per physical CPU core.
-
-#MAX_HEAP_SIZE="4G"
-#HEAP_NEWSIZE="800M"
+# TEST CONTAINER SPEED UP
+MAX_HEAP_SIZE="64M"
+HEAP_NEWSIZE="12M"
 
 # Set this to control the amount of arenas per-thread in glibc
 #export MALLOC_ARENA_MAX=4

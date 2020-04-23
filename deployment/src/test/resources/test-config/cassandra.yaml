@@ -45,7 +45,8 @@ initial_token: 0
 
 # See http://wiki.apache.org/cassandra/HintedHandoff
 # May either be "true" or "false" to enable globally
-hinted_handoff_enabled: true
+# TEST CONTAINER SPEED UP
+hinted_handoff_enabled: false
 
 # When hinted_handoff_enabled is true, a black list of data centers that will not
 # perform hinted handoff
@@ -288,7 +289,7 @@ thrift_prepared_statements_cache_size_mb:
 # NOTE: if you reduce the size, you may not get you hottest keys loaded on startup.
 #
 # Default value is empty to make it "auto" (min(5% of Heap (in MB), 100MB)). Set to 0 to disable key cache.
-key_cache_size_in_mb:
+key_cache_size_in_mb: 0
 
 # Duration in seconds after which Cassandra should
 # save the key cache. Caches are saved to saved_caches_directory as
@@ -323,6 +324,7 @@ key_cache_save_period: 14400
 # headroom for OS block level cache. Do never allow your system to swap.
 #
 # Default value is 0, to disable row caching.
+# TEST CONTAINER SPEED UP
 row_cache_size_in_mb: 0
 
 # Duration in seconds after which Cassandra should save the row cache.
@@ -438,13 +440,15 @@ seed_provider:
 # On the other hand, since writes are almost never IO bound, the ideal
 # number of "concurrent_writes" is dependent on the number of cores in
 # your system; (8 * number_of_cores) is a good rule of thumb.
-concurrent_reads: 32
-concurrent_writes: 32
-concurrent_counter_writes: 32
+# TEST CONTAINER SPEED UP
+concurrent_reads: 2
+concurrent_writes: 2
+concurrent_counter_writes: 2
 
 # For materialized view writes, as there is a read involved, so this should
 # be limited by the less of concurrent reads or concurrent writes.
-concurrent_materialized_view_writes: 32
+# TEST CONTAINER SPEED UP
+concurrent_materialized_view_writes: 2
 
 # Maximum memory to use for sstable chunk cache and buffer pooling.
 # 32MB of this are reserved for pooling buffers, the rest is used as an
@@ -720,7 +724,8 @@ rpc_keepalive: true
 #
 # Alternatively,  can provide your own RPC server by providing the fully-qualified class name
 # of an o.a.c.t.TServerFactory that can create an instance of it.
-rpc_server_type: sync
+# TEST CONTAINER SPEED UP
+rpc_server_type: hsha
 
 # Uncomment rpc_min|max_thread to set request pool size limits.
 #
@@ -732,8 +737,9 @@ rpc_server_type: sync
 # encouraged to set a maximum that makes sense for you in production, but do keep in mind that
 # rpc_max_threads represents the maximum number of client requests this server may execute concurrently.
 #
-# rpc_min_threads: 16
-# rpc_max_threads: 2048
+# TEST CONTAINER SPEED UP
+rpc_min_threads: 1
+rpc_max_threads: 1
 
 # uncomment to set socket buffer sizes on rpc connections
 # rpc_send_buff_size_in_bytes:
@@ -812,7 +818,8 @@ column_index_cache_size_in_kb: 2
 # 
 # If your data directories are backed by SSD, you should increase this
 # to the number of cores.
-#concurrent_compactors: 1
+# TEST CONTAINER SPEED UP
+concurrent_compactors: 1
 
 # Throttles compaction to the given total throughput across the entire
 # system. The faster you insert data, the faster you need to compact in
@@ -820,7 +827,8 @@ column_index_cache_size_in_kb: 2
 # 16 to 32 times the rate you are inserting data is more than sufficient.
 # Setting this to 0 disables throttling. Note that this account for all types
 # of compaction, including validation compaction.
-compaction_throughput_mb_per_sec: 16
+# TEST CONTAINER SPEED UP
+compaction_throughput_mb_per_sec: 0
 
 # When compacting, the replacement sstable(s) can be opened before they
 # are completely written, and used in place of the prior sstables for
