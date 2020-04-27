@@ -7,11 +7,11 @@
 #
 # Then, build the image with:
 #
-# docker build -f src/main/docker/Dockerfile.native -t quarkus/mongo-client .
+# docker build -f src/main/docker/Dockerfile.native -t quarkus/cassandra-client .
 #
 # Then run the container using:
 #
-# docker run -i --rm -p 8080:8080 quarkus/mongo-client
+# docker run -i --rm -p 8080:8080 quarkus/cassandra-client
 #
 ###
 FROM registry.access.redhat.com/ubi8/ubi-minimal
