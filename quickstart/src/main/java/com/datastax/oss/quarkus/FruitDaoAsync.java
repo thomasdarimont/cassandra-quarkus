@@ -15,16 +15,18 @@
  */
 package com.datastax.oss.quarkus;
 
-import com.datastax.oss.driver.api.core.CqlIdentifier;
-import com.datastax.oss.driver.api.mapper.annotations.DaoFactory;
-import com.datastax.oss.driver.api.mapper.annotations.DaoKeyspace;
-import com.datastax.oss.driver.api.mapper.annotations.Mapper;
+import com.datastax.dse.driver.api.mapper.reactive.MappedReactiveResultSet;
+import com.datastax.oss.driver.api.mapper.annotations.Dao;
+import com.datastax.oss.driver.api.mapper.annotations.Select;
+import com.datastax.oss.driver.api.mapper.annotations.Update;
+import java.util.concurrent.CompletionStage;
 
-@Mapper
-public interface FruitMapper {
-  @DaoFactory
-  FruitDao fruitDao(@DaoKeyspace CqlIdentifier keyspace);
+@Dao
+public interface FruitDaoAsync {
 
-  @DaoFactory
-  FruitDaoAsync fruitDaoAsync(@DaoKeyspace CqlIdentifier keyspace);
+  @Update
+  CompletionStage<Void> updateAsync(Fruit fruitDao);
+
+  @Select
+  MappedReactiveResultSet<Fruit> findByIdAsync(String id);
 }
