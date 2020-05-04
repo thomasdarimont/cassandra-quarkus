@@ -27,6 +27,4 @@ public class CassandraClientConfig {
   @ConfigItem(name = ConfigItem.PARENT)
   public CassandraClientConnectionConfig cassandraClientConnectionConfig;
 
-  // todo more low granular conf objects (i.e. ssl, cloud)
-
 }

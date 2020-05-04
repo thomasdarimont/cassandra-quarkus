@@ -23,7 +23,7 @@ import com.datastax.oss.driver.api.mapper.annotations.Update;
 @Dao
 public interface FruitDao {
   @Update
-  void update(Fruit fruitDao);
+  void update(Fruit fruit);
 
   @Select
   PagingIterable<Fruit> findById(String id);
