@@ -299,3 +299,7 @@ You can then point your browser to `http://localhost:8080/fruits.html` and use y
 == Conclusion
 
 Accessing a Cassandra database from a Cassandra Client is easy with Quarkus as it provides configuration and native support for it.
+
+== Configuration Reference
+
+include::{generated-dir}/config/cassandra-quarkus.adoc[opts=optional, leveloffset=+1]
