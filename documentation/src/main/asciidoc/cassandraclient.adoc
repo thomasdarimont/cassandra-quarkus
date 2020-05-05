@@ -28,7 +28,7 @@ The elements are stored in the Cassandra Database.
 We recommend that you follow the instructions in the next sections and create the application step by step.
 However, you can go right to the completed example.
 
-The solution is located in the `quickstart` https://github.com/datastax/cassandra-quarkus/tree/master/quickstart[directory].
+The solution is located in the `quickstart` {quickstart-clone-url}[directory].
 
 == Creating the Maven project
 
@@ -204,7 +204,7 @@ You can configure all java-driver settings using the `application.conf` or `appl
 They will be passed automatically to the underlying java-driver config loader.
 The settings from `application.properties` with `quarkus.cassandra` prefix have the priority.
 
-To see the full list of settings, please refer to the https://github.com/datastax/java-driver/blob/4.x/core/src/main/resources/reference.conf[reference.conf]
+To see the full list of settings, please refer to the {reference-conf-url}[reference.conf]
 
 == Running a Cassandra Database
 As by default, `CassandraClient` is configured to access a local Cassandra database on port 9042 (the default Cassandra port).
@@ -249,7 +249,7 @@ cqlsh -e "CREATE TABLE IF NOT EXISTS k1.fruit(id text, name text, description te
 
 Now let's add a simple web page to interact with our `FruitResource`.
 Quarkus automatically serves static resources located under the `META-INF/resources` directory.
-In the `src/main/resources/META-INF/resources` directory, add a `fruits.html` file with the content from this https://github.com/datastax/cassandra-quarkus/tree/master/quickstart/src/main/resources/META-INF/resources/fruits.html[fruits.html] file in it.
+In the `src/main/resources/META-INF/resources` directory, add a `fruits.html` file with the content from this {fruits-html-url}[fruits.html] file in it.
 
 You can now interact with your REST service:
 
@@ -282,7 +282,7 @@ quarkus.cassandra.metrics.session-enabled=connected-nodes
 quarkus.cassandra.metrics.node-enabled=pool.open-connections
 ----
 
-For the full list of available metrics, please refer to the https://github.com/datastax/java-driver/blob/4.x/core/src/main/resources/reference.conf[reference.conf] and the `advanced.metrics` section.
+For the full list of available metrics, please refer to the {reference-conf-url}[reference.conf] and the `advanced.metrics` section.
 
 So when you access the `/metrics` endpoint of your application you will have information about added metrics.
 
