@@ -15,17 +15,18 @@
  */
 package com.datastax.oss.quarkus.runtime.reactive;
 
-import com.datastax.dse.driver.api.core.cql.continuous.reactive.ContinuousReactiveResultSet;
 import com.datastax.dse.driver.api.core.cql.reactive.ReactiveRow;
 import com.datastax.dse.driver.api.core.graph.GraphStatement;
 import com.datastax.dse.driver.api.core.graph.reactive.ReactiveGraphNode;
-import com.datastax.dse.driver.api.core.graph.reactive.ReactiveGraphResultSet;
 import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.cql.AsyncResultSet;
+import com.datastax.oss.driver.api.core.cql.PrepareRequest;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.datastax.oss.driver.api.core.cql.Statement;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import io.smallrye.mutiny.Multi;
-import org.reactivestreams.Publisher;
+import io.smallrye.mutiny.Uni;
 
 public class QuarkusReactiveCqlSession {
   private CqlSession cqlSession;
@@ -36,30 +37,51 @@ public class QuarkusReactiveCqlSession {
 
   @NonNull
   Multi<ReactiveRow> executeContinuouslyReactive(@NonNull String query) {
-    return executeContinuouslyReactive(SimpleStatement.newInstance(query));
+    return Wrappers.toMulti(cqlSession.executeContinuouslyReactive(query));
   }
 
   @NonNull
   Multi<ReactiveRow> executeContinuouslyReactive(@NonNull Statement<?> statement) {
-    ContinuousReactiveResultSet continuousReactiveResultSet =
-        cqlSession.executeContinuouslyReactive(statement);
-    return Wrappers.toMulti(continuousReactiveResultSet);
+    return Wrappers.toMulti(cqlSession.executeContinuouslyReactive(statement));
   }
 
   @NonNull
   Multi<ReactiveGraphNode> executeReactive(@NonNull GraphStatement<?> statement) {
-    ReactiveGraphResultSet reactiveGraphResultSet = cqlSession.executeReactive(statement);
-    return Wrappers.toMulti(reactiveGraphResultSet);
+    return Wrappers.toMulti(cqlSession.executeReactive(statement));
   }
 
   @NonNull
   Multi<ReactiveRow> executeReactive(@NonNull String query) {
-    return executeReactive(SimpleStatement.newInstance(query));
+    return Wrappers.toMulti(cqlSession.executeReactive(query));
   }
 
   @NonNull
   Multi<ReactiveRow> executeReactive(@NonNull Statement<?> statement) {
-    Publisher<ReactiveRow> reactiveResultSet = cqlSession.executeReactive(statement);
-    return Wrappers.toMulti(reactiveResultSet);
+    return Wrappers.toMulti(cqlSession.executeReactive(statement));
+  }
+
+  @NonNull
+  Uni<AsyncResultSet> executeAsync(@NonNull String query) {
+    return Wrappers.toUni(cqlSession.executeAsync(query));
+  }
+
+  @NonNull
+  Uni<AsyncResultSet> executeAsync(@NonNull Statement<?> statement) {
+    return Wrappers.toUni(cqlSession.executeAsync(statement));
+  }
+
+  @NonNull
+  Uni<PreparedStatement> prepareAsync(@NonNull String query) {
+    return Wrappers.toUni(cqlSession.prepareAsync(query));
+  }
+
+  @NonNull
+  Uni<PreparedStatement> prepareAsync(@NonNull SimpleStatement statement) {
+    return Wrappers.toUni(cqlSession.prepareAsync(statement));
+  }
+
+  @NonNull
+  Uni<PreparedStatement> prepareAsync(PrepareRequest request) {
+    return Wrappers.toUni(cqlSession.prepareAsync(request));
   }
 }

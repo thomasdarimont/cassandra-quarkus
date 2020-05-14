@@ -16,8 +16,10 @@
 package com.datastax.oss.quarkus.runtime.reactive;
 
 import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
 import io.vertx.core.Context;
 import io.vertx.core.Vertx;
+import java.util.concurrent.CompletionStage;
 import org.reactivestreams.Publisher;
 
 public class Wrappers {
@@ -30,5 +32,9 @@ public class Wrappers {
     } else {
       return Multi.createFrom().publisher(publisher);
     }
+  }
+
+  static <T> Uni<T> toUni(CompletionStage<T> completionStage) {
+    return Uni.createFrom().completionStage(completionStage);
   }
 }
