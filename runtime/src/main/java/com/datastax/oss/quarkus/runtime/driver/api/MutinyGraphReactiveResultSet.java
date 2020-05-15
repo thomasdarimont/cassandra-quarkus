@@ -37,5 +37,5 @@ public interface MutinyGraphReactiveResultSet
    */
   @NonNull
   @Override
-  Multi<? extends ExecutionInfo> getExecutionInfos();
+  Multi<ExecutionInfo> getExecutionInfos();
 }

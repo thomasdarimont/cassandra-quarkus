@@ -42,16 +42,19 @@ import org.reactivestreams.Subscriber;
 public class DefaultMutinyGraphReactiveResultSet implements MutinyGraphReactiveResultSet {
 
   private final Multi<ReactiveGraphNode> multi;
-  private final Multi<? extends ExecutionInfo> executionInfos;
+  private final Multi<ExecutionInfo> executionInfos;
 
   public DefaultMutinyGraphReactiveResultSet(ReactiveGraphResultSet reactiveGraphResultSet) {
     multi = Wrappers.toMulti(reactiveGraphResultSet);
-    executionInfos = Wrappers.toMulti(reactiveGraphResultSet.getExecutionInfos());
+    @SuppressWarnings("unchecked")
+    Multi<ExecutionInfo> executionInfos =
+        (Multi<ExecutionInfo>) Wrappers.toMulti(reactiveGraphResultSet.getExecutionInfos());
+    this.executionInfos = executionInfos;
   }
 
   @NonNull
   @Override
-  public Multi<? extends ExecutionInfo> getExecutionInfos() {
+  public Multi<ExecutionInfo> getExecutionInfos() {
     return executionInfos;
   }
 

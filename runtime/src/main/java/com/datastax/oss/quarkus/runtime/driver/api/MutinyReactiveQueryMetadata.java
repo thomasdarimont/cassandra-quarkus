@@ -37,7 +37,7 @@ public interface MutinyReactiveQueryMetadata extends ReactiveQueryMetadata {
    */
   @NonNull
   @Override
-  Multi<? extends ColumnDefinitions> getColumnDefinitions();
+  Multi<ColumnDefinitions> getColumnDefinitions();
 
   /**
    * Returns {@linkplain ExecutionInfo information about the execution} of all requests that have
@@ -52,7 +52,7 @@ public interface MutinyReactiveQueryMetadata extends ReactiveQueryMetadata {
    */
   @NonNull
   @Override
-  Multi<? extends ExecutionInfo> getExecutionInfos();
+  Multi<ExecutionInfo> getExecutionInfos();
 
   /**
    * If the query that produced this result was a conditional update, indicates whether it was
