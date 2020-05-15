@@ -27,10 +27,9 @@ import org.eclipse.microprofile.metrics.MetricRegistry;
 public class QuarkusSessionBuilder
     extends SessionBuilder<QuarkusSessionBuilder, QuarkusCqlSession> {
 
-  private MetricRegistry metricRegistry;
+  private final MetricRegistry metricRegistry;
 
   public QuarkusSessionBuilder(MetricRegistry metricRegistry) {
-
     this.metricRegistry = metricRegistry;
   }
 

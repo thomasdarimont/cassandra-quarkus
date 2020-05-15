@@ -39,37 +39,39 @@ import io.smallrye.mutiny.groups.MultiTransform;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 
-public class MutinyReactiveResultSetImpl
+public class DefaultMutinyReactiveResultSet
     implements MutinyReactiveResultSet, MutinyContinuousReactiveResultSet {
 
-  private final ReactiveResultSet reactiveResultSet;
   private final Multi<ReactiveRow> multi;
+  private final Multi<? extends ColumnDefinitions> columnDefinitions;
+  private final Multi<? extends ExecutionInfo> executionInfos;
+  private final Multi<Boolean> wasApplied;
 
-  public MutinyReactiveResultSetImpl(ReactiveResultSet reactiveResultSet) {
-
-    this.reactiveResultSet = reactiveResultSet;
-    this.multi = Wrappers.toMulti(reactiveResultSet);
+  public DefaultMutinyReactiveResultSet(ReactiveResultSet reactiveResultSet) {
+    multi = Wrappers.toMulti(reactiveResultSet);
+    columnDefinitions = Wrappers.toMulti(reactiveResultSet.getColumnDefinitions());
+    executionInfos = Wrappers.toMulti(reactiveResultSet.getExecutionInfos());
+    wasApplied = Wrappers.toMulti(reactiveResultSet.wasApplied());
   }
 
   @NonNull
   @Override
-  public Publisher<? extends ColumnDefinitions> getColumnDefinitions() {
-    return reactiveResultSet.getColumnDefinitions();
+  public Multi<? extends ColumnDefinitions> getColumnDefinitions() {
+    return columnDefinitions;
   }
 
   @NonNull
   @Override
-  public Publisher<? extends ExecutionInfo> getExecutionInfos() {
-    return reactiveResultSet.getExecutionInfos();
+  public Multi<? extends ExecutionInfo> getExecutionInfos() {
+    return executionInfos;
   }
 
   @NonNull
   @Override
-  public Publisher<Boolean> wasApplied() {
-    return reactiveResultSet.wasApplied();
+  public Multi<Boolean> wasApplied() {
+    return wasApplied;
   }
 
   @Override

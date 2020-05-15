@@ -26,7 +26,8 @@ import com.datastax.oss.quarkus.runtime.driver.api.QuarkusCqlSession;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class DefaultQuarkusCqlSession extends SessionWrapper implements QuarkusCqlSession {
-  private CqlSession delegate;
+
+  private final CqlSession delegate;
 
   public DefaultQuarkusCqlSession(@NonNull CqlSession delegate) {
     super(delegate);
@@ -36,29 +37,29 @@ public class DefaultQuarkusCqlSession extends SessionWrapper implements QuarkusC
   @NonNull
   @Override
   public MutinyContinuousReactiveResultSet executeContinuouslyReactive(@NonNull String query) {
-    return new MutinyReactiveResultSetImpl(delegate.executeContinuouslyReactive(query));
+    return new DefaultMutinyReactiveResultSet(delegate.executeContinuouslyReactive(query));
   }
 
   @NonNull
   public MutinyContinuousReactiveResultSet executeContinuouslyReactive(
       @NonNull Statement<?> statement) {
-    return new MutinyReactiveResultSetImpl(delegate.executeContinuouslyReactive(statement));
+    return new DefaultMutinyReactiveResultSet(delegate.executeContinuouslyReactive(statement));
   }
 
   @NonNull
   public MutinyGraphReactiveResultSet executeReactive(@NonNull GraphStatement<?> statement) {
-    return new MutinyGraphReactiveResultSetImpl(delegate.executeReactive(statement));
+    return new DefaultMutinyGraphReactiveResultSet(delegate.executeReactive(statement));
   }
 
   @NonNull
   @Override
   public MutinyReactiveResultSet executeReactive(@NonNull String query) {
-    return new MutinyReactiveResultSetImpl(delegate.executeReactive(query));
+    return new DefaultMutinyReactiveResultSet(delegate.executeReactive(query));
   }
 
   @NonNull
   @Override
   public MutinyReactiveResultSet executeReactive(@NonNull Statement<?> statement) {
-    return new MutinyReactiveResultSetImpl(delegate.executeReactive(statement));
+    return new DefaultMutinyReactiveResultSet(delegate.executeReactive(statement));
   }
 }

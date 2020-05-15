@@ -19,4 +19,5 @@ import com.datastax.dse.driver.api.core.cql.reactive.ReactiveResultSet;
 import com.datastax.dse.driver.api.core.cql.reactive.ReactiveRow;
 import io.smallrye.mutiny.Multi;
 
-public interface MutinyReactiveResultSet extends Multi<ReactiveRow>, ReactiveResultSet {}
+public interface MutinyReactiveResultSet
+    extends Multi<ReactiveRow>, ReactiveResultSet, MutinyReactiveQueryMetadata {}

@@ -17,7 +17,25 @@ package com.datastax.oss.quarkus.runtime.driver.api;
 
 import com.datastax.dse.driver.api.core.graph.reactive.ReactiveGraphNode;
 import com.datastax.dse.driver.api.core.graph.reactive.ReactiveGraphResultSet;
+import com.datastax.oss.driver.api.core.cql.ExecutionInfo;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import io.smallrye.mutiny.Multi;
 
 public interface MutinyGraphReactiveResultSet
-    extends Multi<ReactiveGraphNode>, ReactiveGraphResultSet {}
+    extends Multi<ReactiveGraphNode>, ReactiveGraphResultSet {
+
+  /**
+   * Returns {@linkplain ExecutionInfo information about the execution} of all requests that have
+   * been performed so far to assemble this result set.
+   *
+   * <p>If the query is not paged, this {@link Multi} will emit exactly one item as soon as the
+   * response arrives, then complete. If the query is paged, it will emit multiple items, one per
+   * page; then it will complete when the last page arrives. If the query execution fails, then this
+   * multi will fail with the same error.
+   *
+   * <p>By default, the multi returned by this method does not support multiple subscriptions.
+   */
+  @NonNull
+  @Override
+  Multi<? extends ExecutionInfo> getExecutionInfos();
+}

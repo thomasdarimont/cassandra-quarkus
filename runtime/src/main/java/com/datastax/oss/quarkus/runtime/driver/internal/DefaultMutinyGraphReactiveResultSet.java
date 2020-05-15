@@ -37,22 +37,22 @@ import io.smallrye.mutiny.groups.MultiTransform;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 
-public class MutinyGraphReactiveResultSetImpl implements MutinyGraphReactiveResultSet {
-  private final ReactiveGraphResultSet reactiveGraphResultSet;
-  private final Multi<ReactiveGraphNode> multi;
+public class DefaultMutinyGraphReactiveResultSet implements MutinyGraphReactiveResultSet {
 
-  public MutinyGraphReactiveResultSetImpl(ReactiveGraphResultSet reactiveGraphResultSet) {
-    this.reactiveGraphResultSet = reactiveGraphResultSet;
-    this.multi = Wrappers.toMulti(reactiveGraphResultSet);
+  private final Multi<ReactiveGraphNode> multi;
+  private final Multi<? extends ExecutionInfo> executionInfos;
+
+  public DefaultMutinyGraphReactiveResultSet(ReactiveGraphResultSet reactiveGraphResultSet) {
+    multi = Wrappers.toMulti(reactiveGraphResultSet);
+    executionInfos = Wrappers.toMulti(reactiveGraphResultSet.getExecutionInfos());
   }
 
   @NonNull
   @Override
-  public Publisher<? extends ExecutionInfo> getExecutionInfos() {
-    return reactiveGraphResultSet.getExecutionInfos();
+  public Multi<? extends ExecutionInfo> getExecutionInfos() {
+    return executionInfos;
   }
 
   @Override
