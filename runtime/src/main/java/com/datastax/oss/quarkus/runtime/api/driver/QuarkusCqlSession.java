@@ -15,16 +15,12 @@
  */
 package com.datastax.oss.quarkus.runtime.api.driver;
 
-import com.datastax.dse.driver.api.core.cql.continuous.reactive.ContinuousReactiveSession;
-import com.datastax.dse.driver.api.core.cql.reactive.ReactiveSession;
 import com.datastax.dse.driver.api.core.graph.GraphStatement;
-import com.datastax.dse.driver.api.core.graph.reactive.ReactiveGraphSession;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.cql.Statement;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
-public interface QuarkusCqlSession
-    extends ReactiveSession, ContinuousReactiveSession, ReactiveGraphSession, CqlSession {
+public interface QuarkusCqlSession extends CqlSession {
   @NonNull
   @Override
   MutinyReactiveResultSet executeReactive(@NonNull String query);
