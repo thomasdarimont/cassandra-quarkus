@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.datastax.oss.quarkus.runtime.api.driver;
+package com.datastax.oss.quarkus.runtime.api.reactive;
 
 import com.datastax.dse.driver.api.core.cql.reactive.ReactiveQueryMetadata;
 import com.datastax.oss.driver.api.core.cql.ColumnDefinitions;

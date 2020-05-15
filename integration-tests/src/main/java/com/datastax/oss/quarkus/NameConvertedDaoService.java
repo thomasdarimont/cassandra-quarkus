@@ -18,7 +18,7 @@ package com.datastax.oss.quarkus;
 import com.datastax.oss.driver.api.core.CqlIdentifier;
 import com.datastax.oss.quarkus.dao.nameconverters.NameConverterEntityDao;
 import com.datastax.oss.quarkus.dao.nameconverters.TestMapperBuilder;
-import com.datastax.oss.quarkus.runtime.api.driver.QuarkusCqlSession;
+import com.datastax.oss.quarkus.runtime.api.session.QuarkusCqlSession;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 

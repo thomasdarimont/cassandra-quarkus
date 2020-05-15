@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.datastax.oss.quarkus.runtime.internal;
+package com.datastax.oss.quarkus.runtime.internal.reactive;
 
-import com.datastax.dse.driver.api.core.graph.reactive.ReactiveGraphNode;
-import com.datastax.dse.driver.api.core.graph.reactive.ReactiveGraphResultSet;
+import com.datastax.dse.driver.api.core.cql.reactive.ReactiveResultSet;
+import com.datastax.dse.driver.api.core.cql.reactive.ReactiveRow;
+import com.datastax.oss.driver.api.core.cql.ColumnDefinitions;
 import com.datastax.oss.driver.api.core.cql.ExecutionInfo;
-import com.datastax.oss.quarkus.runtime.api.driver.MutinyGraphReactiveResultSet;
-import com.datastax.oss.quarkus.runtime.reactive.Wrappers;
+import com.datastax.oss.quarkus.runtime.api.reactive.MutinyContinuousReactiveResultSet;
+import com.datastax.oss.quarkus.runtime.api.reactive.MutinyReactiveResultSet;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -39,17 +40,31 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import org.reactivestreams.Subscriber;
 
-public class DefaultMutinyGraphReactiveResultSet implements MutinyGraphReactiveResultSet {
+public class DefaultMutinyReactiveResultSet
+    implements MutinyReactiveResultSet, MutinyContinuousReactiveResultSet {
 
-  private final Multi<ReactiveGraphNode> multi;
+  private final Multi<ReactiveRow> multi;
+  private final Multi<ColumnDefinitions> columnDefinitions;
   private final Multi<ExecutionInfo> executionInfos;
+  private final Multi<Boolean> wasApplied;
 
-  public DefaultMutinyGraphReactiveResultSet(ReactiveGraphResultSet reactiveGraphResultSet) {
-    multi = Wrappers.toMulti(reactiveGraphResultSet);
+  public DefaultMutinyReactiveResultSet(ReactiveResultSet reactiveResultSet) {
+    multi = Wrappers.toMulti(reactiveResultSet);
+    @SuppressWarnings("unchecked")
+    Multi<ColumnDefinitions> columnDefinitions =
+        (Multi<ColumnDefinitions>) Wrappers.toMulti(reactiveResultSet.getColumnDefinitions());
+    this.columnDefinitions = columnDefinitions;
     @SuppressWarnings("unchecked")
     Multi<ExecutionInfo> executionInfos =
-        (Multi<ExecutionInfo>) Wrappers.toMulti(reactiveGraphResultSet.getExecutionInfos());
+        (Multi<ExecutionInfo>) Wrappers.toMulti(reactiveResultSet.getExecutionInfos());
     this.executionInfos = executionInfos;
+    wasApplied = Wrappers.toMulti(reactiveResultSet.wasApplied());
+  }
+
+  @NonNull
+  @Override
+  public Multi<ColumnDefinitions> getColumnDefinitions() {
+    return columnDefinitions;
   }
 
   @NonNull
@@ -58,98 +73,104 @@ public class DefaultMutinyGraphReactiveResultSet implements MutinyGraphReactiveR
     return executionInfos;
   }
 
+  @NonNull
   @Override
-  public MultiSubscribe<ReactiveGraphNode> subscribe() {
+  public Multi<Boolean> wasApplied() {
+    return wasApplied;
+  }
+
+  @Override
+  public MultiSubscribe<ReactiveRow> subscribe() {
     return multi.subscribe();
   }
 
   @Override
-  public MultiOnItem<ReactiveGraphNode> onItem() {
+  public MultiOnItem<ReactiveRow> onItem() {
     return multi.onItem();
   }
 
   @Override
-  public <O> O then(Function<Multi<ReactiveGraphNode>, O> stage) {
+  public <O> O then(Function<Multi<ReactiveRow>, O> stage) {
     return multi.then(stage);
   }
 
   @Override
-  public Uni<ReactiveGraphNode> toUni() {
+  public Uni<ReactiveRow> toUni() {
     return multi.toUni();
   }
 
   @Override
-  public MultiOnFailure<ReactiveGraphNode> onFailure() {
+  public MultiOnFailure<ReactiveRow> onFailure() {
     return multi.onFailure();
   }
 
   @Override
-  public MultiOnFailure<ReactiveGraphNode> onFailure(Predicate<? super Throwable> predicate) {
+  public MultiOnFailure<ReactiveRow> onFailure(Predicate<? super Throwable> predicate) {
     return multi.onFailure(predicate);
   }
 
   @Override
-  public MultiOnFailure<ReactiveGraphNode> onFailure(Class<? extends Throwable> aClass) {
+  public MultiOnFailure<ReactiveRow> onFailure(Class<? extends Throwable> aClass) {
     return multi.onFailure(aClass);
   }
 
   @Override
-  public MultiOnEvent<ReactiveGraphNode> on() {
+  public MultiOnEvent<ReactiveRow> on() {
     return multi.on();
   }
 
   @Override
-  public Multi<ReactiveGraphNode> cache() {
+  public Multi<ReactiveRow> cache() {
     return multi.cache();
   }
 
   @Override
-  public MultiCollect<ReactiveGraphNode> collectItems() {
+  public MultiCollect<ReactiveRow> collectItems() {
     return multi.collectItems();
   }
 
   @Override
-  public MultiGroup<ReactiveGraphNode> groupItems() {
+  public MultiGroup<ReactiveRow> groupItems() {
     return multi.groupItems();
   }
 
   @Override
-  public Multi<ReactiveGraphNode> emitOn(Executor executor) {
+  public Multi<ReactiveRow> emitOn(Executor executor) {
     return multi.emitOn(executor);
   }
 
   @Override
-  public Multi<ReactiveGraphNode> subscribeOn(Executor executor) {
+  public Multi<ReactiveRow> subscribeOn(Executor executor) {
     return multi.subscribeOn(executor);
   }
 
   @Override
-  public MultiOnCompletion<ReactiveGraphNode> onCompletion() {
+  public MultiOnCompletion<ReactiveRow> onCompletion() {
     return multi.onCompletion();
   }
 
   @Override
-  public MultiTransform<ReactiveGraphNode> transform() {
+  public MultiTransform<ReactiveRow> transform() {
     return multi.transform();
   }
 
   @Override
-  public MultiOverflow<ReactiveGraphNode> onOverflow() {
+  public MultiOverflow<ReactiveRow> onOverflow() {
     return multi.onOverflow();
   }
 
   @Override
-  public MultiBroadcast<ReactiveGraphNode> broadcast() {
+  public MultiBroadcast<ReactiveRow> broadcast() {
     return multi.broadcast();
   }
 
   @Override
-  public MultiConvert<ReactiveGraphNode> convert() {
+  public MultiConvert<ReactiveRow> convert() {
     return multi.convert();
   }
 
   @Override
-  public void subscribe(Subscriber<? super ReactiveGraphNode> subscriber) {
+  public void subscribe(Subscriber<? super ReactiveRow> subscriber) {
     multi.subscribe(subscriber);
   }
 }

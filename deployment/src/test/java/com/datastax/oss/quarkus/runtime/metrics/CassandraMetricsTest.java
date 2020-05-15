@@ -19,7 +19,7 @@ import static com.datastax.oss.quarkus.runtime.metrics.MicroProfileMetricsUpdate
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.datastax.oss.quarkus.CassandraTestBase;
-import com.datastax.oss.quarkus.runtime.api.driver.QuarkusCqlSession;
+import com.datastax.oss.quarkus.runtime.api.session.QuarkusCqlSession;
 import io.quarkus.test.QuarkusUnitTest;
 import io.quarkus.test.common.QuarkusTestResource;
 import javax.inject.Inject;

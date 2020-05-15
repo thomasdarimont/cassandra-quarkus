@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.datastax.oss.quarkus.runtime.internal;
+package com.datastax.oss.quarkus.runtime.internal.reactive;
 
-import com.datastax.dse.driver.api.core.cql.reactive.ReactiveResultSet;
-import com.datastax.dse.driver.api.core.cql.reactive.ReactiveRow;
-import com.datastax.oss.driver.api.core.cql.ColumnDefinitions;
+import com.datastax.dse.driver.api.core.graph.reactive.ReactiveGraphNode;
+import com.datastax.dse.driver.api.core.graph.reactive.ReactiveGraphResultSet;
 import com.datastax.oss.driver.api.core.cql.ExecutionInfo;
-import com.datastax.oss.quarkus.runtime.api.driver.MutinyContinuousReactiveResultSet;
-import com.datastax.oss.quarkus.runtime.api.driver.MutinyReactiveResultSet;
-import com.datastax.oss.quarkus.runtime.reactive.Wrappers;
+import com.datastax.oss.quarkus.runtime.api.reactive.MutinyGraphReactiveResultSet;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -41,31 +38,17 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import org.reactivestreams.Subscriber;
 
-public class DefaultMutinyReactiveResultSet
-    implements MutinyReactiveResultSet, MutinyContinuousReactiveResultSet {
+public class DefaultMutinyGraphReactiveResultSet implements MutinyGraphReactiveResultSet {
 
-  private final Multi<ReactiveRow> multi;
-  private final Multi<ColumnDefinitions> columnDefinitions;
+  private final Multi<ReactiveGraphNode> multi;
   private final Multi<ExecutionInfo> executionInfos;
-  private final Multi<Boolean> wasApplied;
 
-  public DefaultMutinyReactiveResultSet(ReactiveResultSet reactiveResultSet) {
-    multi = Wrappers.toMulti(reactiveResultSet);
-    @SuppressWarnings("unchecked")
-    Multi<ColumnDefinitions> columnDefinitions =
-        (Multi<ColumnDefinitions>) Wrappers.toMulti(reactiveResultSet.getColumnDefinitions());
-    this.columnDefinitions = columnDefinitions;
+  public DefaultMutinyGraphReactiveResultSet(ReactiveGraphResultSet reactiveGraphResultSet) {
+    multi = Wrappers.toMulti(reactiveGraphResultSet);
     @SuppressWarnings("unchecked")
     Multi<ExecutionInfo> executionInfos =
-        (Multi<ExecutionInfo>) Wrappers.toMulti(reactiveResultSet.getExecutionInfos());
+        (Multi<ExecutionInfo>) Wrappers.toMulti(reactiveGraphResultSet.getExecutionInfos());
     this.executionInfos = executionInfos;
-    wasApplied = Wrappers.toMulti(reactiveResultSet.wasApplied());
-  }
-
-  @NonNull
-  @Override
-  public Multi<ColumnDefinitions> getColumnDefinitions() {
-    return columnDefinitions;
   }
 
   @NonNull
@@ -74,104 +57,98 @@ public class DefaultMutinyReactiveResultSet
     return executionInfos;
   }
 
-  @NonNull
   @Override
-  public Multi<Boolean> wasApplied() {
-    return wasApplied;
-  }
-
-  @Override
-  public MultiSubscribe<ReactiveRow> subscribe() {
+  public MultiSubscribe<ReactiveGraphNode> subscribe() {
     return multi.subscribe();
   }
 
   @Override
-  public MultiOnItem<ReactiveRow> onItem() {
+  public MultiOnItem<ReactiveGraphNode> onItem() {
     return multi.onItem();
   }
 
   @Override
-  public <O> O then(Function<Multi<ReactiveRow>, O> stage) {
+  public <O> O then(Function<Multi<ReactiveGraphNode>, O> stage) {
     return multi.then(stage);
   }
 
   @Override
-  public Uni<ReactiveRow> toUni() {
+  public Uni<ReactiveGraphNode> toUni() {
     return multi.toUni();
   }
 
   @Override
-  public MultiOnFailure<ReactiveRow> onFailure() {
+  public MultiOnFailure<ReactiveGraphNode> onFailure() {
     return multi.onFailure();
   }
 
   @Override
-  public MultiOnFailure<ReactiveRow> onFailure(Predicate<? super Throwable> predicate) {
+  public MultiOnFailure<ReactiveGraphNode> onFailure(Predicate<? super Throwable> predicate) {
     return multi.onFailure(predicate);
   }
 
   @Override
-  public MultiOnFailure<ReactiveRow> onFailure(Class<? extends Throwable> aClass) {
+  public MultiOnFailure<ReactiveGraphNode> onFailure(Class<? extends Throwable> aClass) {
     return multi.onFailure(aClass);
   }
 
   @Override
-  public MultiOnEvent<ReactiveRow> on() {
+  public MultiOnEvent<ReactiveGraphNode> on() {
     return multi.on();
   }
 
   @Override
-  public Multi<ReactiveRow> cache() {
+  public Multi<ReactiveGraphNode> cache() {
     return multi.cache();
   }
 
   @Override
-  public MultiCollect<ReactiveRow> collectItems() {
+  public MultiCollect<ReactiveGraphNode> collectItems() {
     return multi.collectItems();
   }
 
   @Override
-  public MultiGroup<ReactiveRow> groupItems() {
+  public MultiGroup<ReactiveGraphNode> groupItems() {
     return multi.groupItems();
   }
 
   @Override
-  public Multi<ReactiveRow> emitOn(Executor executor) {
+  public Multi<ReactiveGraphNode> emitOn(Executor executor) {
     return multi.emitOn(executor);
   }
 
   @Override
-  public Multi<ReactiveRow> subscribeOn(Executor executor) {
+  public Multi<ReactiveGraphNode> subscribeOn(Executor executor) {
     return multi.subscribeOn(executor);
   }
 
   @Override
-  public MultiOnCompletion<ReactiveRow> onCompletion() {
+  public MultiOnCompletion<ReactiveGraphNode> onCompletion() {
     return multi.onCompletion();
   }
 
   @Override
-  public MultiTransform<ReactiveRow> transform() {
+  public MultiTransform<ReactiveGraphNode> transform() {
     return multi.transform();
   }
 
   @Override
-  public MultiOverflow<ReactiveRow> onOverflow() {
+  public MultiOverflow<ReactiveGraphNode> onOverflow() {
     return multi.onOverflow();
   }
 
   @Override
-  public MultiBroadcast<ReactiveRow> broadcast() {
+  public MultiBroadcast<ReactiveGraphNode> broadcast() {
     return multi.broadcast();
   }
 
   @Override
-  public MultiConvert<ReactiveRow> convert() {
+  public MultiConvert<ReactiveGraphNode> convert() {
     return multi.convert();
   }
 
   @Override
-  public void subscribe(Subscriber<? super ReactiveRow> subscriber) {
+  public void subscribe(Subscriber<? super ReactiveGraphNode> subscriber) {
     multi.subscribe(subscriber);
   }
 }

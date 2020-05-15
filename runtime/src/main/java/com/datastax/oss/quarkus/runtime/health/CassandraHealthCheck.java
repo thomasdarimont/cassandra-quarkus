@@ -16,7 +16,7 @@
 package com.datastax.oss.quarkus.runtime.health;
 
 import com.datastax.oss.driver.api.core.cql.Row;
-import com.datastax.oss.quarkus.runtime.api.driver.QuarkusCqlSession;
+import com.datastax.oss.quarkus.runtime.api.session.QuarkusCqlSession;
 import io.quarkus.arc.Arc;
 import java.util.HashMap;
 import java.util.Map;

@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.datastax.oss.quarkus.runtime.api.driver;
+package com.datastax.oss.quarkus.runtime.api.session;
 
 import com.datastax.dse.driver.api.core.graph.GraphStatement;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.cql.Statement;
+import com.datastax.oss.quarkus.runtime.api.reactive.MutinyContinuousReactiveResultSet;
+import com.datastax.oss.quarkus.runtime.api.reactive.MutinyGraphReactiveResultSet;
+import com.datastax.oss.quarkus.runtime.api.reactive.MutinyReactiveResultSet;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 public interface QuarkusCqlSession extends CqlSession {

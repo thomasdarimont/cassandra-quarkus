@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.datastax.oss.quarkus.runtime.reactive;
+package com.datastax.oss.quarkus.runtime.api.session;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,8 +22,7 @@ import com.datastax.oss.driver.api.core.cql.ExecutionInfo;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.datastax.oss.driver.internal.core.cql.DefaultExecutionInfo;
 import com.datastax.oss.quarkus.CassandraTestBase;
-import com.datastax.oss.quarkus.runtime.api.driver.MutinyReactiveResultSet;
-import com.datastax.oss.quarkus.runtime.api.driver.QuarkusCqlSession;
+import com.datastax.oss.quarkus.runtime.api.reactive.MutinyReactiveResultSet;
 import io.quarkus.test.QuarkusUnitTest;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.reactivex.subscribers.TestSubscriber;
