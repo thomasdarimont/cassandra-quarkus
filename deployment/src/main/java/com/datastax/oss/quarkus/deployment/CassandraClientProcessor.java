@@ -43,6 +43,7 @@ import com.datastax.oss.quarkus.config.CassandraClientConfig;
 import com.datastax.oss.quarkus.runtime.AbstractCassandraClientProducer;
 import com.datastax.oss.quarkus.runtime.CassandraClientRecorder;
 import com.datastax.oss.quarkus.runtime.metrics.MetricsConfig;
+import com.datastax.oss.quarkus.runtime.reactive.QuarkusReactiveCqlSession;
 import io.quarkus.arc.Unremovable;
 import io.quarkus.arc.deployment.BeanContainerListenerBuildItem;
 import io.quarkus.arc.deployment.GeneratedBeanBuildItem;
@@ -67,6 +68,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import org.eclipse.microprofile.metrics.MetricRegistry;
@@ -175,8 +177,6 @@ class CassandraClientProcessor {
         defaultCassandraClient.addAnnotation(ApplicationScoped.class);
         defaultCassandraClient.addAnnotation(Produces.class);
         defaultCassandraClient.addAnnotation(Default.class);
-
-        // make CqlSession as Unremovable bean
         defaultCassandraClient.addAnnotation(Unremovable.class);
 
         ResultHandle cassandraClientConfig =
@@ -222,6 +222,29 @@ class CassandraClientProcessor {
                 metricsConfig,
                 metricRegistry,
                 protocolCompression));
+      }
+
+      try (MethodCreator defaultCassandraClient =
+          classCreator.getMethodCreator(
+              "createDefaultReactiveCassandraClient",
+              QuarkusReactiveCqlSession.class,
+              CqlSession.class)) {
+        defaultCassandraClient.addAnnotation(Dependent.class);
+        defaultCassandraClient.addAnnotation(Default.class);
+        defaultCassandraClient.addAnnotation(Produces.class);
+        defaultCassandraClient.addAnnotation(Unremovable.class);
+
+        ResultHandle cqlSession = defaultCassandraClient.getMethodParam(0);
+
+        defaultCassandraClient.returnValue(
+            defaultCassandraClient.invokeVirtualMethod(
+                MethodDescriptor.ofMethod(
+                    AbstractCassandraClientProducer.class,
+                    "quarkusReactiveCqlSession",
+                    QuarkusReactiveCqlSession.class,
+                    CqlSession.class),
+                defaultCassandraClient.getThis(),
+                cqlSession));
       }
     }
   }

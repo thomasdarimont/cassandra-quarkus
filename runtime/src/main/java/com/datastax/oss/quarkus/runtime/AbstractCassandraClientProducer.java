@@ -28,6 +28,7 @@ import com.datastax.oss.quarkus.config.CassandraClientConfig;
 import com.datastax.oss.quarkus.config.CassandraClientConnectionConfig;
 import com.datastax.oss.quarkus.runtime.driver.QuarkusSessionBuilder;
 import com.datastax.oss.quarkus.runtime.metrics.MetricsConfig;
+import com.datastax.oss.quarkus.runtime.reactive.QuarkusReactiveCqlSession;
 import com.typesafe.config.ConfigFactory;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.concurrent.CompletionStage;
@@ -89,6 +90,10 @@ public abstract class AbstractCassandraClientProducer {
 
   public String getProtocolCompression() {
     return protocolCompression;
+  }
+
+  public QuarkusReactiveCqlSession quarkusReactiveCqlSession(CqlSession cqlSession) {
+    return new QuarkusReactiveCqlSession(cqlSession);
   }
 
   public CqlSession createCassandraClient(

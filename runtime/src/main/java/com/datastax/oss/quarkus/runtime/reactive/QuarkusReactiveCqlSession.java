@@ -37,12 +37,12 @@ public class QuarkusReactiveCqlSession {
 
   @NonNull
   Multi<ReactiveRow> executeContinuouslyReactive(@NonNull String query) {
-    return Wrappers.toMulti(cqlSession.executeContinuouslyReactive(query));
+    return new MutinyReactiveResultSet(cqlSession.executeContinuouslyReactive(query));
   }
 
   @NonNull
   Multi<ReactiveRow> executeContinuouslyReactive(@NonNull Statement<?> statement) {
-    return Wrappers.toMulti(cqlSession.executeContinuouslyReactive(statement));
+    return new MutinyReactiveResultSet(cqlSession.executeContinuouslyReactive(statement));
   }
 
   @NonNull
@@ -52,12 +52,12 @@ public class QuarkusReactiveCqlSession {
 
   @NonNull
   Multi<ReactiveRow> executeReactive(@NonNull String query) {
-    return Wrappers.toMulti(cqlSession.executeReactive(query));
+    return new MutinyReactiveResultSet(cqlSession.executeReactive(query));
   }
 
   @NonNull
   Multi<ReactiveRow> executeReactive(@NonNull Statement<?> statement) {
-    return Wrappers.toMulti(cqlSession.executeReactive(statement));
+    return new MutinyReactiveResultSet(cqlSession.executeReactive(statement));
   }
 
   @NonNull

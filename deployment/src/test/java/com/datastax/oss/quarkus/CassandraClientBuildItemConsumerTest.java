@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.quarkus.deployment.CassandraClientBuildItem;
+import com.datastax.oss.quarkus.runtime.reactive.QuarkusReactiveCqlSession;
 import io.quarkus.arc.Arc;
 import io.quarkus.builder.BuildChainBuilder;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
@@ -44,6 +45,7 @@ public class CassandraClientBuildItemConsumerTest {
     // verify that CqlSession bean is present - it must be unremovable to be present at this stage
     // of the lifecycle
     assertThat(Arc.container().instance(CqlSession.class).get()).isNotNull();
+    assertThat(Arc.container().instance(QuarkusReactiveCqlSession.class).get()).isNotNull();
   }
 
   protected static Consumer<BuildChainBuilder> buildCustomizer() {
