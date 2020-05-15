@@ -16,7 +16,7 @@
 package com.datastax.oss.quarkus;
 
 import com.datastax.oss.driver.api.core.CqlIdentifier;
-import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.quarkus.runtime.driver.api.QuarkusCqlSession;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -26,7 +26,7 @@ public class FruitService {
   private final FruitDao dao;
 
   @Inject
-  public FruitService(CqlSession session) {
+  public FruitService(QuarkusCqlSession session) {
     dao = new FruitMapperBuilder(session).build().fruitDao(CqlIdentifier.fromCql("k1"));
   }
 

@@ -13,20 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.datastax.oss.quarkus.deployment;
+package com.datastax.oss.quarkus.runtime.driver.api;
 
-import com.datastax.oss.quarkus.runtime.driver.api.QuarkusCqlSession;
-import io.quarkus.builder.item.SimpleBuildItem;
-import io.quarkus.runtime.RuntimeValue;
+import com.datastax.dse.driver.api.core.graph.reactive.ReactiveGraphNode;
+import com.datastax.dse.driver.api.core.graph.reactive.ReactiveGraphResultSet;
+import io.smallrye.mutiny.Multi;
 
-public final class CassandraClientBuildItem extends SimpleBuildItem {
-  private final RuntimeValue<QuarkusCqlSession> cqlSession;
-
-  public CassandraClientBuildItem(RuntimeValue<QuarkusCqlSession> cqlSession) {
-    this.cqlSession = cqlSession;
-  }
-
-  public RuntimeValue<QuarkusCqlSession> getCqlSession() {
-    return cqlSession;
-  }
-}
+public interface MutinyGraphReactiveResultSet
+    extends Multi<ReactiveGraphNode>, ReactiveGraphResultSet {}

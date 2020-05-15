@@ -13,33 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.datastax.oss.quarkus.runtime.driver;
+package com.datastax.oss.quarkus.runtime.driver.internal;
 
-import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.config.DriverConfigLoader;
-import com.datastax.oss.driver.api.core.context.DriverContext;
 import com.datastax.oss.driver.api.core.session.ProgrammaticArguments;
-import com.datastax.oss.driver.api.core.session.SessionBuilder;
-import edu.umd.cs.findbugs.annotations.NonNull;
+import com.datastax.oss.driver.internal.core.context.DefaultDriverContext;
+import com.datastax.oss.driver.internal.core.metrics.MetricsFactory;
+import com.datastax.oss.quarkus.runtime.metrics.MicroProfileMetricsFactory;
 import org.eclipse.microprofile.metrics.MetricRegistry;
 
-public class QuarkusSessionBuilder extends SessionBuilder<QuarkusSessionBuilder, CqlSession> {
+public class QuarkusDriverContext extends DefaultDriverContext {
 
-  private MetricRegistry metricRegistry;
+  private final MetricRegistry metricRegistry;
 
-  public QuarkusSessionBuilder(MetricRegistry metricRegistry) {
-
+  public QuarkusDriverContext(
+      DriverConfigLoader configLoader,
+      ProgrammaticArguments programmaticArguments,
+      MetricRegistry metricRegistry) {
+    super(configLoader, programmaticArguments);
     this.metricRegistry = metricRegistry;
   }
 
   @Override
-  protected CqlSession wrap(@NonNull CqlSession cqlSession) {
-    return cqlSession;
-  }
-
-  @Override
-  protected DriverContext buildContext(
-      DriverConfigLoader configLoader, ProgrammaticArguments programmaticArguments) {
-    return new QuarkusDriverContext(configLoader, programmaticArguments, metricRegistry);
+  protected MetricsFactory buildMetricsFactory() {
+    return new MicroProfileMetricsFactory(this, metricRegistry);
   }
 }

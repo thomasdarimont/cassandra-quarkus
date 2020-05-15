@@ -22,6 +22,8 @@ import com.datastax.oss.driver.api.core.cql.ExecutionInfo;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.datastax.oss.driver.internal.core.cql.DefaultExecutionInfo;
 import com.datastax.oss.quarkus.CassandraTestBase;
+import com.datastax.oss.quarkus.runtime.driver.api.MutinyReactiveResultSet;
+import com.datastax.oss.quarkus.runtime.driver.api.QuarkusCqlSession;
 import io.quarkus.test.QuarkusUnitTest;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.reactivex.subscribers.TestSubscriber;
@@ -36,8 +38,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 @QuarkusTestResource(CassandraTestBase.class)
-public class QuarkusReactiveCqlSessionTest {
-  @Inject QuarkusReactiveCqlSession quarkusReactiveCqlSession;
+public class QuarkusCqlSessionTest {
+  @Inject QuarkusCqlSession quarkusCqlSession;
 
   @RegisterExtension
   static QuarkusUnitTest runner =
@@ -49,24 +51,24 @@ public class QuarkusReactiveCqlSessionTest {
   @Test
   public void should_execute_reactive_query_string() {
     // when
-    Multi<ReactiveRow> reactiveRowMulti =
-        quarkusReactiveCqlSession.executeReactive("select * from system.local");
+    MutinyReactiveResultSet reactiveRowMulti =
+        quarkusCqlSession.executeReactive("select * from system.local");
 
     // then
     validateReactiveRowNotEmpty(reactiveRowMulti);
-    validateExecutionInfoNotEmpty((MutinyReactiveResultSet) reactiveRowMulti);
+    validateExecutionInfoNotEmpty(reactiveRowMulti);
   }
 
   @Test
   public void should_execute_reactive_query_statement() {
     // when
-    Multi<ReactiveRow> reactiveRowMulti =
-        quarkusReactiveCqlSession.executeReactive(
+    MutinyReactiveResultSet reactiveRowMulti =
+        quarkusCqlSession.executeReactive(
             SimpleStatement.newInstance("select * from system.local"));
 
     // then
     validateReactiveRowNotEmpty(reactiveRowMulti);
-    validateExecutionInfoNotEmpty((MutinyReactiveResultSet) reactiveRowMulti);
+    validateExecutionInfoNotEmpty(reactiveRowMulti);
   }
 
   private void validateReactiveRowNotEmpty(Multi<ReactiveRow> reactiveRowMulti) {

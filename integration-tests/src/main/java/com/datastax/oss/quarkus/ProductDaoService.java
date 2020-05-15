@@ -16,9 +16,9 @@
 package com.datastax.oss.quarkus;
 
 import com.datastax.oss.driver.api.core.CqlIdentifier;
-import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.quarkus.dao.InventoryMapperBuilder;
 import com.datastax.oss.quarkus.dao.ProductDao;
+import com.datastax.oss.quarkus.runtime.driver.api.QuarkusCqlSession;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -28,7 +28,7 @@ public class ProductDaoService {
   private final ProductDao dao;
 
   @Inject
-  public ProductDaoService(CqlSession session) {
+  public ProductDaoService(QuarkusCqlSession session) {
 
     session.execute(
         "CREATE KEYSPACE IF NOT EXISTS k1 WITH replication "

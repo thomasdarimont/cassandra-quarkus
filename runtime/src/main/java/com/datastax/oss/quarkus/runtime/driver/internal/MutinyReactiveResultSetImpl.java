@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.datastax.oss.quarkus.runtime.reactive;
+package com.datastax.oss.quarkus.runtime.driver.internal;
 
 import com.datastax.dse.driver.api.core.cql.reactive.ReactiveResultSet;
 import com.datastax.dse.driver.api.core.cql.reactive.ReactiveRow;
 import com.datastax.oss.driver.api.core.cql.ColumnDefinitions;
 import com.datastax.oss.driver.api.core.cql.ExecutionInfo;
+import com.datastax.oss.quarkus.runtime.driver.api.MutinyContinuousReactiveResultSet;
+import com.datastax.oss.quarkus.runtime.driver.api.MutinyReactiveResultSet;
+import com.datastax.oss.quarkus.runtime.reactive.Wrappers;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -39,12 +42,13 @@ import java.util.function.Predicate;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 
-public class MutinyReactiveResultSet implements Multi<ReactiveRow>, ReactiveResultSet {
+public class MutinyReactiveResultSetImpl
+    implements MutinyReactiveResultSet, MutinyContinuousReactiveResultSet {
 
   private final ReactiveResultSet reactiveResultSet;
   private final Multi<ReactiveRow> multi;
 
-  public MutinyReactiveResultSet(ReactiveResultSet reactiveResultSet) {
+  public MutinyReactiveResultSetImpl(ReactiveResultSet reactiveResultSet) {
 
     this.reactiveResultSet = reactiveResultSet;
     this.multi = Wrappers.toMulti(reactiveResultSet);
