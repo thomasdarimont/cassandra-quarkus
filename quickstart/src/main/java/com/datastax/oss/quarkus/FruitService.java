@@ -16,7 +16,7 @@
 package com.datastax.oss.quarkus;
 
 import com.datastax.oss.driver.api.core.CqlIdentifier;
-import com.datastax.oss.quarkus.runtime.driver.api.QuarkusCqlSession;
+import com.datastax.oss.quarkus.runtime.api.driver.QuarkusCqlSession;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

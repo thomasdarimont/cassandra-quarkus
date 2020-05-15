@@ -15,7 +15,7 @@
  */
 package com.datastax.oss.quarkus.config;
 
-import com.datastax.oss.quarkus.runtime.driver.api.QuarkusCqlSession;
+import com.datastax.oss.quarkus.runtime.api.driver.QuarkusCqlSession;
 import io.quarkus.runtime.annotations.ConfigGroup;
 import io.quarkus.runtime.annotations.ConfigItem;
 import java.time.Duration;

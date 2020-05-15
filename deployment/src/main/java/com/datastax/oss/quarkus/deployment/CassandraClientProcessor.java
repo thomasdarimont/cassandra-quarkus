@@ -41,7 +41,7 @@ import com.datastax.oss.driver.internal.core.tracker.RequestLogger;
 import com.datastax.oss.quarkus.config.CassandraClientConfig;
 import com.datastax.oss.quarkus.runtime.AbstractCassandraClientProducer;
 import com.datastax.oss.quarkus.runtime.CassandraClientRecorder;
-import com.datastax.oss.quarkus.runtime.driver.api.QuarkusCqlSession;
+import com.datastax.oss.quarkus.runtime.api.driver.QuarkusCqlSession;
 import com.datastax.oss.quarkus.runtime.metrics.MetricsConfig;
 import io.quarkus.arc.Unremovable;
 import io.quarkus.arc.deployment.BeanContainerListenerBuildItem;

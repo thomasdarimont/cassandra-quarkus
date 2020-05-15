@@ -18,7 +18,7 @@ package com.datastax.oss.quarkus;
 import com.datastax.oss.driver.api.core.CqlIdentifier;
 import com.datastax.oss.quarkus.dao.InventoryMapperBuilder;
 import com.datastax.oss.quarkus.dao.ProductDao;
-import com.datastax.oss.quarkus.runtime.driver.api.QuarkusCqlSession;
+import com.datastax.oss.quarkus.runtime.api.driver.QuarkusCqlSession;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 

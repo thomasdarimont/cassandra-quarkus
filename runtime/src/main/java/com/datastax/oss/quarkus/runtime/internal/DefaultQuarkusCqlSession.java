@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.datastax.oss.quarkus.runtime.driver.internal;
+package com.datastax.oss.quarkus.runtime.internal;
 
 import com.datastax.dse.driver.api.core.graph.GraphStatement;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.cql.Statement;
 import com.datastax.oss.driver.internal.core.session.SessionWrapper;
-import com.datastax.oss.quarkus.runtime.driver.api.MutinyContinuousReactiveResultSet;
-import com.datastax.oss.quarkus.runtime.driver.api.MutinyGraphReactiveResultSet;
-import com.datastax.oss.quarkus.runtime.driver.api.MutinyReactiveResultSet;
-import com.datastax.oss.quarkus.runtime.driver.api.QuarkusCqlSession;
+import com.datastax.oss.quarkus.runtime.api.driver.MutinyContinuousReactiveResultSet;
+import com.datastax.oss.quarkus.runtime.api.driver.MutinyGraphReactiveResultSet;
+import com.datastax.oss.quarkus.runtime.api.driver.MutinyReactiveResultSet;
+import com.datastax.oss.quarkus.runtime.api.driver.QuarkusCqlSession;
 import edu.umd.cs.findbugs.annotations.NonNull;
 
 public class DefaultQuarkusCqlSession extends SessionWrapper implements QuarkusCqlSession {

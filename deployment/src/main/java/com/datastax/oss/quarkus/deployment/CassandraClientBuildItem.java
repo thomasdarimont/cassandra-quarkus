@@ -15,7 +15,7 @@
  */
 package com.datastax.oss.quarkus.deployment;
 
-import com.datastax.oss.quarkus.runtime.driver.api.QuarkusCqlSession;
+import com.datastax.oss.quarkus.runtime.api.driver.QuarkusCqlSession;
 import io.quarkus.builder.item.SimpleBuildItem;
 import io.quarkus.runtime.RuntimeValue;
 

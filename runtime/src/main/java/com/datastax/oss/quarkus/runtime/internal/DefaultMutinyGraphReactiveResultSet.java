@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.datastax.oss.quarkus.runtime.driver.internal;
+package com.datastax.oss.quarkus.runtime.internal;
 
 import com.datastax.dse.driver.api.core.graph.reactive.ReactiveGraphNode;
 import com.datastax.dse.driver.api.core.graph.reactive.ReactiveGraphResultSet;
 import com.datastax.oss.driver.api.core.cql.ExecutionInfo;
-import com.datastax.oss.quarkus.runtime.driver.api.MutinyGraphReactiveResultSet;
+import com.datastax.oss.quarkus.runtime.api.driver.MutinyGraphReactiveResultSet;
 import com.datastax.oss.quarkus.runtime.reactive.Wrappers;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import io.smallrye.mutiny.Multi;
