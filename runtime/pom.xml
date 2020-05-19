@@ -72,6 +72,10 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>com.datastax.oss</groupId>
+      <artifactId>java-driver-mapper-runtime</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.graalvm.nativeimage</groupId>
       <artifactId>svm</artifactId>
     </dependency>
