@@ -1,6 +1,7 @@
 ### 1.0.0 (in progress)
 
-- [new feature] JAVA-2754: Integration between Driver reactive API and Quarkus 
+- [new feature] JAVA-2754: Integration between Driver reactive API and Quarkus
+- [documentation] JAVA-2684: Add documentation and examples of Quarkus Cassandra extension 
 - [new feature] JAVA-2683: Create a Quarkus Cassandra quick starter
 - [improvement] JAVA-2707: Substitute optional dependencies with Quarkus Substitution
 - [new feature] JAVA-2694: Add Metrics to the extension
