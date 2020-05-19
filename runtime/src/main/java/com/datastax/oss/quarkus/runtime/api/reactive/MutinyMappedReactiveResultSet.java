@@ -13,18 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.datastax.oss.quarkus;
+package com.datastax.oss.quarkus.runtime.api.reactive;
 
-import com.datastax.oss.driver.api.core.CqlIdentifier;
-import com.datastax.oss.driver.api.mapper.annotations.DaoFactory;
-import com.datastax.oss.driver.api.mapper.annotations.DaoKeyspace;
-import com.datastax.oss.driver.api.mapper.annotations.Mapper;
+import com.datastax.dse.driver.api.mapper.reactive.MappedReactiveResultSet;
+import io.smallrye.mutiny.Multi;
 
-@Mapper
-public interface FruitMapper {
-  @DaoFactory
-  FruitDao fruitDao(@DaoKeyspace CqlIdentifier keyspace);
-
-  @DaoFactory
-  FruitDaoAsync fruitDaoAsync(@DaoKeyspace CqlIdentifier keyspace);
-}
+public interface MutinyMappedReactiveResultSet<EntityT>
+    extends MappedReactiveResultSet<EntityT>, Multi<EntityT> {}
