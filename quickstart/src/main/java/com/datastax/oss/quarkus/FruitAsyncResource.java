@@ -33,12 +33,14 @@ public class FruitAsyncResource {
   @Inject FruitAsyncService service;
 
   @GET
-  public Multi<Fruit> getAll() {
-    return service.get(STORE_NAME);
+  public Multi<FruitDto> getAll() {
+    return service
+        .get(STORE_NAME)
+        .map(fruit -> new FruitDto(fruit.getName(), fruit.getDescription()));
   }
 
   @POST
-  public Multi<Fruit> add(FruitDto fruitDto) {
+  public Multi<FruitDto> add(FruitDto fruitDto) {
     Fruit fruit = covertFromDto(fruitDto);
     return Uni.createFrom().completionStage(service.add(fruit)).then(ignored -> getAll());
   }
