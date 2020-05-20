@@ -177,6 +177,7 @@
           <excludes>
             <exclude>.idea/**</exclude>
             <exclude>.github/**</exclude>
+            <exclude>**/dependency-reduced-pom.xml</exclude>
             <exclude>**/target/**</exclude>
           </excludes>
         </configuration>
