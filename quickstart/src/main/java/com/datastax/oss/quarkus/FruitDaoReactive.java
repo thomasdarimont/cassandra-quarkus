@@ -15,12 +15,10 @@
  */
 package com.datastax.oss.quarkus;
 
-import com.datastax.dse.driver.api.mapper.reactive.MappedReactiveResultSet;
 import com.datastax.oss.driver.api.mapper.annotations.Dao;
 import com.datastax.oss.driver.api.mapper.annotations.Select;
 import com.datastax.oss.driver.api.mapper.annotations.Update;
 import com.datastax.oss.quarkus.runtime.api.reactive.MutinyMappedReactiveResultSet;
-import com.datastax.oss.quarkus.runtime.internal.reactive.DefaultMutinyMappedReactiveResultSet;
 import java.util.concurrent.CompletionStage;
 
 @Dao
@@ -30,9 +28,5 @@ public interface FruitDaoReactive {
   CompletionStage<Void> updateAsync(Fruit fruitDao);
 
   @Select
-  MappedReactiveResultSet<Fruit> findByIdAsync(String id);
-
-  default MutinyMappedReactiveResultSet<Fruit> findByIdAsyncMutiny(String id) {
-    return new DefaultMutinyMappedReactiveResultSet<>(findByIdAsync(id));
-  }
+  MutinyMappedReactiveResultSet<Fruit> findByIdAsync(String id);
 }

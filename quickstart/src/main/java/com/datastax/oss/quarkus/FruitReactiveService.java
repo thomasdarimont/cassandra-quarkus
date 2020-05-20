@@ -36,6 +36,6 @@ public class FruitReactiveService {
   }
 
   public Multi<Fruit> get(String id) {
-    return fruitDao.findByIdAsyncMutiny(id);
+    return fruitDao.findByIdAsync(id);
   }
 }
