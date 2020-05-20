@@ -17,7 +17,16 @@ package com.datastax.oss.quarkus.runtime.api.reactive;
 
 import com.datastax.dse.driver.api.core.cql.continuous.reactive.ContinuousReactiveResultSet;
 import com.datastax.dse.driver.api.core.cql.reactive.ReactiveRow;
+import com.datastax.oss.driver.api.core.cql.Statement;
+import com.datastax.oss.quarkus.runtime.api.session.QuarkusCqlSession;
 import io.smallrye.mutiny.Multi;
 
+/**
+ * A marker interface for {@code Multi<ReactiveRow>} returned by {@link QuarkusCqlSession}.
+ *
+ * @see QuarkusCqlSession#executeContinuouslyReactive(String)
+ * @see QuarkusCqlSession#executeContinuouslyReactive(Statement)
+ * @see ContinuousReactiveResultSet
+ */
 public interface MutinyContinuousReactiveResultSet
     extends Multi<ReactiveRow>, ContinuousReactiveResultSet, MutinyReactiveQueryMetadata {}

@@ -15,12 +15,20 @@
  */
 package com.datastax.oss.quarkus.runtime.api.reactive;
 
+import com.datastax.dse.driver.api.core.graph.GraphStatement;
 import com.datastax.dse.driver.api.core.graph.reactive.ReactiveGraphNode;
 import com.datastax.dse.driver.api.core.graph.reactive.ReactiveGraphResultSet;
 import com.datastax.oss.driver.api.core.cql.ExecutionInfo;
+import com.datastax.oss.quarkus.runtime.api.session.QuarkusCqlSession;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import io.smallrye.mutiny.Multi;
 
+/**
+ * A marker interface for {@code Multi<ReactiveGraphNode>} returned by {@link QuarkusCqlSession}.
+ *
+ * @see QuarkusCqlSession#executeReactive(GraphStatement)
+ * @see ReactiveGraphResultSet
+ */
 public interface MutinyGraphReactiveResultSet
     extends Multi<ReactiveGraphNode>, ReactiveGraphResultSet {
 

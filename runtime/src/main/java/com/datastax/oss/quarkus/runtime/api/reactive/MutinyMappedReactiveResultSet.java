@@ -16,7 +16,29 @@
 package com.datastax.oss.quarkus.runtime.api.reactive;
 
 import com.datastax.dse.driver.api.mapper.reactive.MappedReactiveResultSet;
+import com.datastax.oss.driver.api.mapper.annotations.Dao;
 import io.smallrye.mutiny.Multi;
 
+/**
+ * A wrapper interface for {@code MappedReactiveResultSet<EntityT>} returned by the java driver
+ * object mapper. It provides the translation from {@code Publisher<EntityT>} to {@code
+ * Multi<EntityT}
+ *
+ * <p>You can leverage this class in the {@link Dao}:
+ *
+ * <pre>
+ * &#64;Dao
+ * public interface FruitDaoReactive {
+ *   &#64;Select
+ *   MappedReactiveResultSet<Fruit> findByIdAsync(String id);
+ *
+ *   default MutinyMappedReactiveResultSet<Fruit> findByIdAsyncMutiny(String id) {
+ *     return new DefaultMutinyMappedReactiveResultSet<>(findByIdAsync(id));
+ *   }
+ * }
+ * </pre>
+ *
+ * @see MappedReactiveResultSet
+ */
 public interface MutinyMappedReactiveResultSet<EntityT>
     extends MappedReactiveResultSet<EntityT>, Multi<EntityT> {}
