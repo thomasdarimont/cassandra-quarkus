@@ -22,12 +22,12 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 @ApplicationScoped
-public class FruitAsyncService {
+public class FruitReactiveService {
 
-  private final FruitDaoAsync fruitDao;
+  private final FruitDaoReactive fruitDao;
 
   @Inject
-  public FruitAsyncService(FruitMapper fruitMapper, FruitServiceConfig fruitServiceConfig) {
+  public FruitReactiveService(FruitMapper fruitMapper, FruitServiceConfig fruitServiceConfig) {
     fruitDao = fruitMapper.fruitDaoAsync(CqlIdentifier.fromCql(fruitServiceConfig.keyspace));
   }
 

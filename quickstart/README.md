@@ -52,7 +52,7 @@ curl -X GET http://localhost:8080/fruits
 ## Reactive demo
 
 This application provides a reactive version of REST controllers. 
-To see how they work, go to `http://localhost:8080/async-fruits.html`
+To see how they work, go to `http://localhost:8080/reactive-fruits.html`
 You can add fruits to the list via the form. This time the logic will be executed in a reactive way. 
 
 Alternatively, you can use curl commands to interact with the underlying REST API.
@@ -61,11 +61,11 @@ To create fruit in an async way:
 curl --header "Content-Type: application/json" \
   --request POST \
   --data '{"name":"async_product","description":"this was created via curl"}' \
-  http://localhost:8080/async-fruits
+  http://localhost:8080/reactive-fruits
 ```
 To retrieve fruits:
 ```shell script
-curl -X GET http://localhost:8080/async-fruits
+curl -X GET http://localhost:8080/reactive-fruits
 ```
 
 # Running in native

@@ -24,7 +24,7 @@ import com.datastax.oss.quarkus.runtime.internal.reactive.DefaultMutinyMappedRea
 import java.util.concurrent.CompletionStage;
 
 @Dao
-public interface FruitDaoAsync {
+public interface FruitDaoReactive {
 
   @Update
   CompletionStage<Void> updateAsync(Fruit fruitDao);

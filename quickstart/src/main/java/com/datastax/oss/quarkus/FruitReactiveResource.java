@@ -25,12 +25,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-@Path("/async-fruits")
+@Path("/reactive-fruits")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class FruitAsyncResource {
+public class FruitReactiveResource {
   private static final String STORE_NAME = "acme";
-  @Inject FruitAsyncService service;
+  @Inject FruitReactiveService service;
 
   @GET
   public Multi<FruitDto> getAll() {
