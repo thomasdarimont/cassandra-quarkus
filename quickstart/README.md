@@ -30,7 +30,7 @@ docker exec -it local-cassandra-instance cqlsh -e "CREATE TABLE IF NOT EXISTS k1
 
 # Run the demo on dev mode
 
-- Run `mvn clean package` and then `java -jar ./target/quickstart-1.0.0-SNAPSHOT-runner.jar`
+- Run `mvn clean package` and then `java -jar ./target/cassandra-quarkus-quickstart-1.0.0-SNAPSHOT-runner.jar`
 - In dev mode `mvn clean quarkus:dev`
 
 Go to `http://localhost:8080/fruits.html`, it should show a simple App to manage list of Fruits. 
