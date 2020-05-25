@@ -131,7 +131,7 @@ We should leverage Quarkus Dependency Injection container and inject the instanc
 import javax.enterprise.inject.Produces;
 
 public class FruitMapperProducer {
-  private final QuarkusCqlSession QuarkusCqlSession;
+  private final QuarkusCqlSession quarkusCqlSession;
 
   @Inject
   public FruitMapperProducer(QuarkusCqlSession quarkusCqlSession) {
