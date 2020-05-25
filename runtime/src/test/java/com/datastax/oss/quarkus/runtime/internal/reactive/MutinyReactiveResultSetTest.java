@@ -56,6 +56,20 @@ class MutinyReactiveResultSetTest {
   }
 
   @Test
+  public void should_validate_failed_mapped_resultSet() {
+    // given
+    List<Integer> items = new ArrayList<>();
+
+    // when
+    MutinyMappedReactiveResultSet<Integer> resultSet =
+        new FailedMutinyMappedReactiveResultSet<>(new Throwable("error"));
+
+    // then
+    resultSet.subscribe().with(items::add);
+    assertThat(items.size()).isEqualTo(0);
+  }
+
+  @Test
   public void should_validate_reactive_result_set() {
     // given
     List<Integer> items = new ArrayList<>();
