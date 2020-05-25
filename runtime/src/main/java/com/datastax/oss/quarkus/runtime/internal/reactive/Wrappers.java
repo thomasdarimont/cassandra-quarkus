@@ -24,7 +24,7 @@ import org.reactivestreams.Publisher;
 
 public class Wrappers {
 
-  public static <T> Multi<T> toMulti(Publisher<T> publisher) {
+  static <T> Multi<T> toMulti(Publisher<T> publisher) {
     Multi<T> multi = Multi.createFrom().publisher(publisher);
     Context context = Vertx.currentContext();
     if (context != null) {

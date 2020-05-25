@@ -17,26 +17,27 @@ package com.datastax.oss.quarkus.runtime.internal.reactive;
 
 import static org.mockito.Mockito.mock;
 
-import com.datastax.oss.driver.api.core.cql.AsyncResultSet;
-import com.datastax.oss.driver.api.core.cql.ColumnDefinitions;
+import com.datastax.dse.driver.api.core.graph.AsyncGraphResultSet;
+import com.datastax.dse.driver.api.core.graph.GraphExecutionInfo;
+import com.datastax.dse.driver.api.core.graph.GraphNode;
+import com.datastax.dse.driver.internal.core.graph.GraphExecutionInfoConverter;
 import com.datastax.oss.driver.api.core.cql.ExecutionInfo;
-import com.datastax.oss.driver.api.core.cql.Row;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import org.assertj.core.util.Lists;
 
-public class MockAsyncResultSet implements AsyncResultSet {
+public class MockAsyncGraphResultSet implements AsyncGraphResultSet {
 
-  private final List<Row> rows;
-  private final Iterator<Row> iterator;
-  private final CompletionStage<AsyncResultSet> nextPage;
+  private final List<GraphNode> rows;
+  private final Iterator<GraphNode> iterator;
+  private final CompletionStage<AsyncGraphResultSet> nextPage;
   private final ExecutionInfo executionInfo = mock(ExecutionInfo.class);
-  private final ColumnDefinitions columnDefinitions = mock(ColumnDefinitions.class);
   private int remaining;
 
-  public MockAsyncResultSet(List<Row> rows, CompletionStage<AsyncResultSet> nextPage) {
+  public MockAsyncGraphResultSet(
+      List<GraphNode> rows, CompletionStage<AsyncGraphResultSet> nextPage) {
     this.rows = rows;
     iterator = rows.iterator();
     remaining = rows.size();
@@ -44,10 +45,23 @@ public class MockAsyncResultSet implements AsyncResultSet {
   }
 
   @Override
-  public Row one() {
-    Row next = iterator.next();
+  public GraphNode one() {
+    GraphNode next = iterator.next();
     remaining--;
     return next;
+  }
+
+  @NonNull
+  @Override
+  public ExecutionInfo getRequestExecutionInfo() {
+    return executionInfo;
+  }
+
+  @SuppressWarnings("deprecated")
+  @NonNull
+  @Override
+  public GraphExecutionInfo getExecutionInfo() {
+    return GraphExecutionInfoConverter.convert(executionInfo);
   }
 
   @Override
@@ -57,7 +71,7 @@ public class MockAsyncResultSet implements AsyncResultSet {
 
   @NonNull
   @Override
-  public List<Row> currentPage() {
+  public List<GraphNode> currentPage() {
     return Lists.newArrayList(rows);
   }
 
@@ -68,24 +82,10 @@ public class MockAsyncResultSet implements AsyncResultSet {
 
   @NonNull
   @Override
-  public CompletionStage<AsyncResultSet> fetchNextPage() throws IllegalStateException {
+  public CompletionStage<AsyncGraphResultSet> fetchNextPage() throws IllegalStateException {
     return nextPage;
   }
 
-  @NonNull
   @Override
-  public ColumnDefinitions getColumnDefinitions() {
-    return columnDefinitions;
-  }
-
-  @NonNull
-  @Override
-  public ExecutionInfo getExecutionInfo() {
-    return executionInfo;
-  }
-
-  @Override
-  public boolean wasApplied() {
-    return true;
-  }
+  public void cancel() {}
 }
