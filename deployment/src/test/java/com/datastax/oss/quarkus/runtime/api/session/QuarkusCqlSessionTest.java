@@ -20,12 +20,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.datastax.dse.driver.api.core.cql.reactive.ReactiveRow;
 import com.datastax.oss.driver.api.core.cql.ExecutionInfo;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
-import com.datastax.oss.driver.internal.core.cql.DefaultExecutionInfo;
 import com.datastax.oss.quarkus.CassandraTestBase;
 import com.datastax.oss.quarkus.runtime.api.reactive.MutinyReactiveResultSet;
 import io.quarkus.test.QuarkusUnitTest;
 import io.quarkus.test.common.QuarkusTestResource;
-import io.reactivex.subscribers.TestSubscriber;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.groups.MultiSubscribe;
 import java.util.List;
@@ -77,11 +75,8 @@ public class QuarkusCqlSessionTest {
   }
 
   private void validateExecutionInfoNotEmpty(MutinyReactiveResultSet reactiveRowMulti) {
-    TestSubscriber<ExecutionInfo> testSubscriber = new TestSubscriber<>();
-    reactiveRowMulti.getExecutionInfos().subscribe(testSubscriber);
-    List<List<Object>> executionsInfo = testSubscriber.getEvents();
-    assertThat(((DefaultExecutionInfo) executionsInfo.get(0).get(0)).getResponseSizeInBytes())
-        .isGreaterThan(0);
-    testSubscriber.assertComplete();
+    MultiSubscribe<ExecutionInfo> result = reactiveRowMulti.getExecutionInfos().subscribe();
+    List<ExecutionInfo> collect = result.asIterable().stream().collect(Collectors.toList());
+    assertThat(collect.get(0).getResponseSizeInBytes()).isGreaterThan(0);
   }
 }
