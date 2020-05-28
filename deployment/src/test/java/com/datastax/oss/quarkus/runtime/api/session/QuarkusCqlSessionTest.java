@@ -18,6 +18,7 @@ package com.datastax.oss.quarkus.runtime.api.session;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.datastax.dse.driver.api.core.cql.reactive.ReactiveRow;
+import com.datastax.oss.driver.api.core.cql.ColumnDefinitions;
 import com.datastax.oss.driver.api.core.cql.ExecutionInfo;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.datastax.oss.quarkus.CassandraTestBase;
@@ -54,6 +55,8 @@ public class QuarkusCqlSessionTest {
     // then
     validateReactiveRowNotEmpty(reactiveRowMulti);
     validateExecutionInfoNotEmpty(reactiveRowMulti);
+    validateWasApplied(reactiveRowMulti);
+    validateColumnDefinitions(reactiveRowMulti);
   }
 
   @Test
@@ -66,6 +69,8 @@ public class QuarkusCqlSessionTest {
     // then
     validateReactiveRowNotEmpty(reactiveRowMulti);
     validateExecutionInfoNotEmpty(reactiveRowMulti);
+    validateWasApplied(reactiveRowMulti);
+    validateColumnDefinitions(reactiveRowMulti);
   }
 
   private void validateReactiveRowNotEmpty(Multi<ReactiveRow> reactiveRowMulti) {
@@ -78,5 +83,17 @@ public class QuarkusCqlSessionTest {
     MultiSubscribe<ExecutionInfo> result = reactiveRowMulti.getExecutionInfos().subscribe();
     List<ExecutionInfo> collect = result.asIterable().stream().collect(Collectors.toList());
     assertThat(collect.get(0).getResponseSizeInBytes()).isGreaterThan(0);
+  }
+
+  private void validateWasApplied(MutinyReactiveResultSet reactiveRowMulti) {
+    MultiSubscribe<Boolean> result = reactiveRowMulti.wasApplied().subscribe();
+    List<Boolean> collect = result.asIterable().stream().collect(Collectors.toList());
+    assertThat(collect.get(0)).isTrue();
+  }
+
+  private void validateColumnDefinitions(MutinyReactiveResultSet reactiveRowMulti) {
+    MultiSubscribe<ColumnDefinitions> result = reactiveRowMulti.getColumnDefinitions().subscribe();
+    List<ColumnDefinitions> collect = result.asIterable().stream().collect(Collectors.toList());
+    assertThat(collect.get(0)).isNotEmpty();
   }
 }

@@ -41,9 +41,8 @@ public class CassandraClientBuildItemConsumerTest {
 
   @Test
   public void testContainerHasBeans() {
-    // verify that QuarkusCqlSession bean is present - it must be unremovable to be present at this
-    // stage
-    // of the lifecycle
+    // verify that QuarkusCqlSession bean is present -
+    // it must be unremovable to be present at this stage of the lifecycle
     assertThat(Arc.container().instance(QuarkusCqlSession.class).get()).isNotNull();
   }
 
