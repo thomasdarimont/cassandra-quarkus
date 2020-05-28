@@ -28,7 +28,7 @@ public class FruitReactiveService {
 
   @Inject
   public FruitReactiveService(FruitMapper fruitMapper, FruitServiceConfig fruitServiceConfig) {
-    fruitDao = fruitMapper.fruitDaoAsync(CqlIdentifier.fromCql(fruitServiceConfig.keyspace));
+    fruitDao = fruitMapper.fruitDaoReactive(CqlIdentifier.fromCql(fruitServiceConfig.keyspace));
   }
 
   public CompletionStage<Void> add(Fruit fruit) {
@@ -36,6 +36,6 @@ public class FruitReactiveService {
   }
 
   public Multi<Fruit> get(String id) {
-    return fruitDao.findByIdAsync(id);
+    return fruitDao.findById(id);
   }
 }

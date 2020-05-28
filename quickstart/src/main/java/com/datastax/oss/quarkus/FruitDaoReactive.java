@@ -28,5 +28,5 @@ public interface FruitDaoReactive {
   CompletionStage<Void> updateAsync(Fruit fruitDao);
 
   @Select
-  MutinyMappedReactiveResultSet<Fruit> findByIdAsync(String id);
+  MutinyMappedReactiveResultSet<Fruit> findById(String id);
 }

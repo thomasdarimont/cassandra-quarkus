@@ -356,7 +356,7 @@ public interface FruitMapper {
   // the existing method omitted
 
   @DaoFactory
-  FruitDaoReactive fruitDaoAsync(@DaoKeyspace CqlIdentifier keyspace);
+  FruitDaoReactive fruitDaoReactive(@DaoKeyspace CqlIdentifier keyspace);
 }
 
 ----

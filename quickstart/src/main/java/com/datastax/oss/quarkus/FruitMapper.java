@@ -26,5 +26,5 @@ public interface FruitMapper {
   FruitDao fruitDao(@DaoKeyspace CqlIdentifier keyspace);
 
   @DaoFactory
-  FruitDaoReactive fruitDaoAsync(@DaoKeyspace CqlIdentifier keyspace);
+  FruitDaoReactive fruitDaoReactive(@DaoKeyspace CqlIdentifier keyspace);
 }
