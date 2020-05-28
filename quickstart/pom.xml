@@ -69,7 +69,7 @@
     </dependency>
     <dependency>
       <groupId>com.datastax.oss.quarkus</groupId>
-      <artifactId>mapper-processor</artifactId>
+      <artifactId>cassandra-quarkus-mapper-processor</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -156,7 +156,7 @@
               <annotationProcessorPaths>
                 <path>
                   <groupId>com.datastax.oss.quarkus</groupId>
-                  <artifactId>mapper-processor</artifactId>
+                  <artifactId>cassandra-quarkus-mapper-processor</artifactId>
                   <version>${project.version}</version>
                 </path>
               </annotationProcessorPaths>

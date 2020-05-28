@@ -326,7 +326,7 @@ We are using the DataStax mapper-processor customized for the Quarkus:
 ----
 <dependency>
   <groupId>com.datastax.oss.quarkus</groupId>
-  <artifactId>mapper-processor</artifactId>
+  <artifactId>cassandra-quarkus-mapper-processor</artifactId>
 </dependency>
 ----
 it provides a `MutinyMappedReactiveResultSet` reactive type that can be used in the `@Dao`.

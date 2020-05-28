@@ -23,7 +23,7 @@
     <version>1.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>mapper-processor</artifactId>
+  <artifactId>cassandra-quarkus-mapper-processor</artifactId>
   <name>Cassandra Quarkus :: Mapper :: Processor</name>
   <dependencyManagement>
     <dependencies>
