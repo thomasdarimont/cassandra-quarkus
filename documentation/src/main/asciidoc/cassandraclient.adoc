@@ -347,3 +347,8 @@ You can then point your browser to `http://localhost:8080/fruits.html` and use y
 == Conclusion
 
 Accessing a Cassandra database from a client application is easy with Quarkus and the Cassandra extension, which provides configuration and native support for the DataStax Java driver for Apache Cassandra.
+
+
+== Configuration Reference
+
+include::{generated-dir}/config/quarkus-cassandra.adoc[opts=optional, leveloffset=+1]
