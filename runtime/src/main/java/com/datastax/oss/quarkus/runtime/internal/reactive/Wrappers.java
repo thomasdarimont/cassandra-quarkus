@@ -17,8 +17,10 @@ package com.datastax.oss.quarkus.runtime.internal.reactive;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
 import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
 import io.vertx.core.Context;
 import io.vertx.core.Vertx;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
 import org.reactivestreams.Publisher;
 
@@ -31,6 +33,15 @@ public class Wrappers {
       multi = multi.emitOn(new VertexContextExecutor(context));
     }
     return multi;
+  }
+
+  public static <T> Uni<T> toUni(CompletionStage<T> completionStage) {
+    Context context = Vertx.currentContext();
+    Uni<T> uni = Uni.createFrom().completionStage(completionStage);
+    if (context != null) {
+      return uni.emitOn(command -> context.runOnContext(x -> command.run()));
+    }
+    return uni;
   }
 
   private static class VertexContextExecutor implements Executor {

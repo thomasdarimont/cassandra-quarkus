@@ -17,7 +17,7 @@ package com.datastax.oss.quarkus;
 
 import com.datastax.oss.driver.api.core.CqlIdentifier;
 import io.smallrye.mutiny.Multi;
-import java.util.concurrent.CompletionStage;
+import io.smallrye.mutiny.Uni;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -31,8 +31,8 @@ public class FruitReactiveService {
     fruitDao = fruitMapper.fruitDaoReactive(CqlIdentifier.fromCql(fruitServiceConfig.keyspace));
   }
 
-  public CompletionStage<Void> add(Fruit fruit) {
-    return fruitDao.updateAsync(fruit);
+  public Uni<Void> add(Fruit fruit) {
+    return fruitDao.updateAsyncMutiny(fruit);
   }
 
   public Multi<Fruit> get(String id) {

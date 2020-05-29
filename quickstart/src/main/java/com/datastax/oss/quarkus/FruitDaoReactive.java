@@ -19,6 +19,8 @@ import com.datastax.oss.driver.api.mapper.annotations.Dao;
 import com.datastax.oss.driver.api.mapper.annotations.Select;
 import com.datastax.oss.driver.api.mapper.annotations.Update;
 import com.datastax.oss.quarkus.runtime.api.reactive.MutinyMappedReactiveResultSet;
+import com.datastax.oss.quarkus.runtime.internal.reactive.Wrappers;
+import io.smallrye.mutiny.Uni;
 import java.util.concurrent.CompletionStage;
 
 @Dao
@@ -26,6 +28,12 @@ public interface FruitDaoReactive {
 
   @Update
   CompletionStage<Void> updateAsync(Fruit fruitDao);
+
+  default Uni<Void> updateAsyncMutiny(Fruit fruitDao) {
+    // TODO once JAVA-2792 will be done, make mapper support Uni in the updateAsync method and
+    // remove this method
+    return Wrappers.toUni(updateAsync(fruitDao));
+  }
 
   @Select
   MutinyMappedReactiveResultSet<Fruit> findById(String id);
