@@ -2,6 +2,7 @@
 
 To generate the documentation run:
 
+    mvn clean install -DskipTests -DskipITs -Dquarkus.docsOutputDir=.
     mvn clean package -Prelease
 
 ## HTML docs
