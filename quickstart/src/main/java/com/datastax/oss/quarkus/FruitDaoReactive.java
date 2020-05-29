@@ -27,12 +27,12 @@ import java.util.concurrent.CompletionStage;
 public interface FruitDaoReactive {
 
   @Update
-  CompletionStage<Void> updateAsync(Fruit fruitDao);
+  CompletionStage<Void> update(Fruit fruitDao);
 
-  default Uni<Void> updateAsyncMutiny(Fruit fruitDao) {
+  default Uni<Void> updateMutiny(Fruit fruitDao) {
     // TODO once JAVA-2792 will be done, make mapper support Uni in the updateAsync method and
     // remove this method
-    return Wrappers.toUni(updateAsync(fruitDao));
+    return Wrappers.toUni(update(fruitDao));
   }
 
   @Select
