@@ -140,8 +140,14 @@ public class DefaultMutinyReactiveResultSet
   }
 
   @Override
+  @Deprecated
   public Multi<ReactiveRow> subscribeOn(Executor executor) {
     return multi.subscribeOn(executor);
+  }
+
+  @Override
+  public Multi<ReactiveRow> runSubscriptionOn(Executor executor) {
+    return multi.runSubscriptionOn(executor);
   }
 
   @Override

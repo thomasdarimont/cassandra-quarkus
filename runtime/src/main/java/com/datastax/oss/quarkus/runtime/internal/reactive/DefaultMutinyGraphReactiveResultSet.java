@@ -118,8 +118,14 @@ public class DefaultMutinyGraphReactiveResultSet implements MutinyGraphReactiveR
   }
 
   @Override
+  @Deprecated
   public Multi<ReactiveGraphNode> subscribeOn(Executor executor) {
     return multi.subscribeOn(executor);
+  }
+
+  @Override
+  public Multi<ReactiveGraphNode> runSubscriptionOn(Executor executor) {
+    return multi.runSubscriptionOn(executor);
   }
 
   @Override
