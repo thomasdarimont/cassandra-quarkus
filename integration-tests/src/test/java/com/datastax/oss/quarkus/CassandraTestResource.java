@@ -20,16 +20,16 @@ import java.util.Collections;
 import java.util.Map;
 import org.jboss.logging.Logger;
 import org.testcontainers.containers.CassandraContainer;
-import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.CassandraQueryWaitStrategy;
 
 public class CassandraTestResource implements QuarkusTestResourceLifecycleManager {
   private static final Logger LOGGER = Logger.getLogger(CassandraTestResource.class);
-  private static GenericContainer<?> cassandraContainer;
+  private static CassandraContainer<?> cassandraContainer;
 
   @Override
   public Map<String, String> start() {
     cassandraContainer = new CassandraContainer<>();
+    cassandraContainer.withInitScript("init_script.cql");
     cassandraContainer.setWaitStrategy(new CassandraQueryWaitStrategy());
     cassandraContainer.start();
     String exposedPort =
