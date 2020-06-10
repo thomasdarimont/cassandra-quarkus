@@ -143,6 +143,9 @@
               <goal>integration-test</goal>
               <goal>verify</goal>
             </goals>
+            <configuration>
+              <excludedGroups>native</excludedGroups>
+            </configuration>
           </execution>
         </executions>
         <configuration>
@@ -154,6 +157,34 @@
     </plugins>
   </build>
   <profiles>
+    <profile>
+      <id>vm</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+        <property>
+          <name>!native</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>integration-test</goal>
+                  <goal>verify</goal>
+                </goals>
+                <configuration>
+                  <excludedGroups>native</excludedGroups>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     <profile>
       <id>native</id>
       <activation>
@@ -168,11 +199,58 @@
             <artifactId>quarkus-maven-plugin</artifactId>
             <executions>
               <execution>
+                <id>native-image</id>
                 <goals>
                   <goal>native-image</goal>
                 </goals>
                 <configuration>
+                  <cleanupServer>true</cleanupServer>
                   <enableHttpUrlHandler>true</enableHttpUrlHandler>
+                  <additionalBuildArgs>-H:+TraceClassInitialization</additionalBuildArgs>
+                  <graalvmHome>${graalvmHome}</graalvmHome>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>vm-tests</id>
+                <goals>
+                  <goal>integration-test</goal>
+                </goals>
+                <configuration>
+                  <excludedGroups>native</excludedGroups>
+                  <summaryFile>${project.build.directory}/failsafe-reports/failsafe-summary-vm.xml</summaryFile>
+                </configuration>
+              </execution>
+              <execution>
+                <id>native-tests</id>
+                <goals>
+                  <goal>integration-test</goal>
+                </goals>
+                <configuration>
+                  <groups>native</groups>
+                  <summaryFile>${project.build.directory}/failsafe-reports/failsafe-summary-native.xml</summaryFile>
+                  <systemProperties>
+                    <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
+                  </systemProperties>
+                </configuration>
+              </execution>
+              <execution>
+                <id>verify</id>
+                <goals>
+                  <goal>verify</goal>
+                </goals>
+                <configuration>
+                  <!-- required because failed native tests are not reported at all -->
+                  <failIfNoTests>true</failIfNoTests>
+                  <summaryFiles>
+                    <summaryFile>${project.build.directory}/failsafe-reports/failsafe-summary-vm.xml</summaryFile>
+                    <summaryFile>${project.build.directory}/failsafe-reports/failsafe-summary-native.xml</summaryFile>
+                  </summaryFiles>
                 </configuration>
               </execution>
             </executions>
