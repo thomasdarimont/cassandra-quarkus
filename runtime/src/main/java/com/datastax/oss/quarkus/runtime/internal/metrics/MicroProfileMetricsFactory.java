@@ -37,11 +37,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.eclipse.microprofile.metrics.MetricRegistry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jboss.logging.Logger;
 
 public class MicroProfileMetricsFactory implements MetricsFactory {
-  private static final Logger LOG = LoggerFactory.getLogger(MicroProfileMetricsFactory.class);
+  private static final Logger LOG = Logger.getLogger(MicroProfileMetricsFactory.class.getName());
 
   private final String logPrefix;
   private final InternalDriverContext context;
@@ -60,7 +59,7 @@ public class MicroProfileMetricsFactory implements MetricsFactory {
         parseNodeMetricPaths(config.getStringList(DefaultDriverOption.METRICS_NODE_ENABLED));
 
     if (enabledSessionMetrics.isEmpty() && enabledNodeMetrics.isEmpty()) {
-      LOG.debug("[{}] All metrics are disabled.", logPrefix);
+      LOG.debugf("[%s] All metrics are disabled.", logPrefix);
       this.registry = null;
       this.sessionUpdater = NoopSessionMetricUpdater.INSTANCE;
     } else {
@@ -97,7 +96,7 @@ public class MicroProfileMetricsFactory implements MetricsFactory {
         try {
           result.add(DseSessionMetric.fromPath(path));
         } catch (IllegalArgumentException e1) {
-          LOG.warn("[{}] Unknown session metric {}, skipping", logPrefix, path);
+          LOG.warnf("[%s] Unknown session metric %s, skipping", logPrefix, path);
         }
       }
     }
@@ -113,7 +112,7 @@ public class MicroProfileMetricsFactory implements MetricsFactory {
         try {
           result.add(DseNodeMetric.fromPath(path));
         } catch (IllegalArgumentException e1) {
-          LOG.warn("[{}] Unknown node metric {}, skipping", logPrefix, path);
+          LOG.warnf("[%s] Unknown node metric %s, skipping", logPrefix, path);
         }
       }
     }

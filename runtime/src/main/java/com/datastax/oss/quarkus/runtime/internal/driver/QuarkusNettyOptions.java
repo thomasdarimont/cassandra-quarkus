@@ -38,11 +38,10 @@ import io.netty.util.internal.PlatformDependent;
 import java.time.Duration;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jboss.logging.Logger;
 
 public class QuarkusNettyOptions implements NettyOptions {
-  private static final Logger LOG = LoggerFactory.getLogger(QuarkusNettyOptions.class);
+  private static final Logger LOG = Logger.getLogger(QuarkusNettyOptions.class.getName());
 
   private final DriverExecutionProfile config;
   private final EventLoopGroup ioEventLoopGroup;
@@ -80,8 +79,8 @@ public class QuarkusNettyOptions implements NettyOptions {
     // JAVA-2264: tick durations on Windows cannot be less than 100 milliseconds,
     // see https://github.com/netty/netty/issues/356.
     if (PlatformDependent.isWindows() && tickDuration.toMillis() < 100) {
-      LOG.warn(
-          "Timer tick duration was set to a value too aggressive for Windows: {} ms; "
+      LOG.warnf(
+          "Timer tick duration was set to a value too aggressive for Windows: %s ms; "
               + "doing so is known to cause extreme CPU usage. "
               + "Please set advanced.netty.timer.tick-duration to 100 ms or higher.",
           tickDuration.toMillis());

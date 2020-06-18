@@ -103,11 +103,12 @@ explains where the component fits in the architecture, and anything else that yo
 
 === Logs
 
-We use SLF4J; loggers are declared like this:
+We use jboss logger; loggers are declared like this:
 
 [source,java]
 ----
-private static final Logger LOG = LoggerFactory.getLogger(TheEnclosingClass.class);
+import org.jboss.logging.Logger;
+private static final Logger LOG = Logger.getLogger(TheEnclosingClass.class.getName());
 ----
 
 For more information, please consult the 

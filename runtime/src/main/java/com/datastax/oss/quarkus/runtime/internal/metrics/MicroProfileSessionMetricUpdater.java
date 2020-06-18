@@ -23,7 +23,6 @@ import com.datastax.oss.driver.api.core.session.throttling.RequestThrottler;
 import com.datastax.oss.driver.internal.core.context.InternalDriverContext;
 import com.datastax.oss.driver.internal.core.cql.CqlPrepareAsyncProcessor;
 import com.datastax.oss.driver.internal.core.cql.CqlPrepareSyncProcessor;
-import com.datastax.oss.driver.internal.core.metrics.DropwizardSessionMetricUpdater;
 import com.datastax.oss.driver.internal.core.metrics.SessionMetricUpdater;
 import com.datastax.oss.driver.internal.core.session.RequestProcessor;
 import com.datastax.oss.driver.internal.core.session.throttling.ConcurrencyLimitingRequestThrottler;
@@ -33,12 +32,12 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Set;
 import org.eclipse.microprofile.metrics.Gauge;
 import org.eclipse.microprofile.metrics.MetricRegistry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jboss.logging.Logger;
 
 public class MicroProfileSessionMetricUpdater extends MicroProfileMetricsUpdater<SessionMetric>
     implements SessionMetricUpdater {
-  private static final Logger LOG = LoggerFactory.getLogger(DropwizardSessionMetricUpdater.class);
+  private static final Logger LOG =
+      Logger.getLogger(MicroProfileSessionMetricUpdater.class.getName());
 
   private final String metricNamePrefix;
 
@@ -86,12 +85,11 @@ public class MicroProfileSessionMetricUpdater extends MicroProfileMetricsUpdater
     Cache<?, ?> cache = getPreparedStatementCache(context);
     Gauge<Long> gauge;
     if (cache == null) {
-      LOG.warn(
-          "[{}] Metric {} is enabled in the config, "
+      LOG.warnf(
+          "[%s] Metric %s is enabled in the config, "
               + "but it looks like no CQL prepare processor is registered. "
               + "The gauge will always return 0",
-          context.getSessionName(),
-          DefaultSessionMetric.CQL_PREPARED_CACHE_SIZE.getPath());
+          context.getSessionName(), DefaultSessionMetric.CQL_PREPARED_CACHE_SIZE.getPath());
       gauge = () -> 0L;
     } else {
       gauge = cache::size;
@@ -110,8 +108,8 @@ public class MicroProfileSessionMetricUpdater extends MicroProfileMetricsUpdater
     } else if (requestThrottler instanceof RateLimitingRequestThrottler) {
       return ((RateLimitingRequestThrottler) requestThrottler)::getQueueSize;
     } else {
-      LOG.warn(
-          "[{}] Metric {} does not support {}, it will always return 0",
+      LOG.warnf(
+          "[%s] Metric %s does not support %s, it will always return 0",
           logPrefix,
           DefaultSessionMetric.THROTTLING_QUEUE_SIZE.getPath(),
           requestThrottler.getClass().getName());
