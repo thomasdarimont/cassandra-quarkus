@@ -37,7 +37,7 @@ import org.jboss.logging.Logger;
 public class MicroProfileSessionMetricUpdater extends MicroProfileMetricsUpdater<SessionMetric>
     implements SessionMetricUpdater {
   private static final Logger LOG =
-      Logger.getLogger(MicroProfileSessionMetricUpdater.class.getName());
+      Logger.getLogger(MicroProfileSessionMetricUpdater.class);
 
   private final String metricNamePrefix;
 
