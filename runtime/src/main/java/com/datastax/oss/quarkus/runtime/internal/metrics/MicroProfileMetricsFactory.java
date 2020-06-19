@@ -40,7 +40,7 @@ import org.eclipse.microprofile.metrics.MetricRegistry;
 import org.jboss.logging.Logger;
 
 public class MicroProfileMetricsFactory implements MetricsFactory {
-  private static final Logger LOG = Logger.getLogger(MicroProfileMetricsFactory.class.getName());
+  private static final Logger LOG = Logger.getLogger(MicroProfileMetricsFactory.class);
 
   private final String logPrefix;
   private final InternalDriverContext context;
