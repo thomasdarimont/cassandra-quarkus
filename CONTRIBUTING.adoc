@@ -103,7 +103,9 @@ explains where the component fits in the architecture, and anything else that yo
 
 === Logs
 
-We use jboss logger; loggers are declared like this:
+We use 
+[JBoss Logging](https://access.redhat.com/documentation/en-us/jboss_enterprise_application_platform/6/html/development_guide/add_logging_to_an_application_with_jboss_logging); 
+loggers are declared like this:
 
 [source,java]
 ----
