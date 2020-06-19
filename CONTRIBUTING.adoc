@@ -110,7 +110,7 @@ loggers are declared like this:
 [source,java]
 ----
 import org.jboss.logging.Logger;
-private static final Logger LOG = Logger.getLogger(TheEnclosingClass.class.getName());
+private static final Logger LOG = Logger.getLogger(TheEnclosingClass.class);
 ----
 
 For more information, please consult the 
