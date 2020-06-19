@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 import org.jboss.logging.Logger;
 
 public class QuarkusNettyOptions implements NettyOptions {
-  private static final Logger LOG = Logger.getLogger(QuarkusNettyOptions.class.getName());
+  private static final Logger LOG = Logger.getLogger(QuarkusNettyOptions.class);
 
   private final DriverExecutionProfile config;
   private final EventLoopGroup ioEventLoopGroup;
