@@ -34,7 +34,10 @@ public class CassandraMetricsIT {
 
     /* Trigger some CQL activity via the test REST endpoint.  We're not particularly
      * interested in the product that gets created here, only that it was created. */
-    when().post("/cassandra/product/metrics-test").then().statusCode(Response.Status.OK.getStatusCode());
+    when()
+        .post("/cassandra/product/metrics-test")
+        .then()
+        .statusCode(Response.Status.OK.getStatusCode());
 
     // then
     when()
