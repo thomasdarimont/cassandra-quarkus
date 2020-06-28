@@ -44,21 +44,28 @@ public class DefaultMutinyReactiveResultSet
     implements MutinyReactiveResultSet, MutinyContinuousReactiveResultSet {
 
   private final Multi<ReactiveRow> multi;
-  private final Multi<ColumnDefinitions> columnDefinitions;
   private final Multi<ExecutionInfo> executionInfos;
+  private final Multi<ColumnDefinitions> columnDefinitions;
   private final Multi<Boolean> wasApplied;
 
-  public DefaultMutinyReactiveResultSet(ReactiveResultSet reactiveResultSet) {
-    multi = Wrappers.toMulti(reactiveResultSet);
-    @SuppressWarnings("unchecked")
-    Multi<ColumnDefinitions> columnDefinitions =
-        (Multi<ColumnDefinitions>) Wrappers.toMulti(reactiveResultSet.getColumnDefinitions());
-    this.columnDefinitions = columnDefinitions;
-    @SuppressWarnings("unchecked")
-    Multi<ExecutionInfo> executionInfos =
-        (Multi<ExecutionInfo>) Wrappers.toMulti(reactiveResultSet.getExecutionInfos());
+  @SuppressWarnings("unchecked")
+  public DefaultMutinyReactiveResultSet(@NonNull ReactiveResultSet resultSet) {
+    this(
+        Wrappers.toMulti(resultSet),
+        (Multi<ExecutionInfo>) Wrappers.toMulti(resultSet.getExecutionInfos()),
+        (Multi<ColumnDefinitions>) Wrappers.toMulti(resultSet.getColumnDefinitions()),
+        Wrappers.toMulti(resultSet.wasApplied()));
+  }
+
+  public DefaultMutinyReactiveResultSet(
+      @NonNull Multi<ReactiveRow> multi,
+      @NonNull Multi<ExecutionInfo> executionInfos,
+      @NonNull Multi<ColumnDefinitions> columnDefinitions,
+      @NonNull Multi<Boolean> wasApplied) {
+    this.multi = multi;
     this.executionInfos = executionInfos;
-    wasApplied = Wrappers.toMulti(reactiveResultSet.wasApplied());
+    this.columnDefinitions = columnDefinitions;
+    this.wasApplied = wasApplied;
   }
 
   @NonNull

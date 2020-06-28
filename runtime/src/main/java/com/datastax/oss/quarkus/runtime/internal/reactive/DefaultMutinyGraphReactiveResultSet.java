@@ -43,11 +43,16 @@ public class DefaultMutinyGraphReactiveResultSet implements MutinyGraphReactiveR
   private final Multi<ReactiveGraphNode> multi;
   private final Multi<ExecutionInfo> executionInfos;
 
-  public DefaultMutinyGraphReactiveResultSet(ReactiveGraphResultSet reactiveGraphResultSet) {
-    multi = Wrappers.toMulti(reactiveGraphResultSet);
-    @SuppressWarnings("unchecked")
-    Multi<ExecutionInfo> executionInfos =
-        (Multi<ExecutionInfo>) Wrappers.toMulti(reactiveGraphResultSet.getExecutionInfos());
+  @SuppressWarnings("unchecked")
+  public DefaultMutinyGraphReactiveResultSet(@NonNull ReactiveGraphResultSet resultSet) {
+    this(
+        Wrappers.toMulti(resultSet),
+        (Multi<ExecutionInfo>) Wrappers.toMulti(resultSet.getExecutionInfos()));
+  }
+
+  public DefaultMutinyGraphReactiveResultSet(
+      @NonNull Multi<ReactiveGraphNode> multi, @NonNull Multi<ExecutionInfo> executionInfos) {
+    this.multi = multi;
     this.executionInfos = executionInfos;
   }
 

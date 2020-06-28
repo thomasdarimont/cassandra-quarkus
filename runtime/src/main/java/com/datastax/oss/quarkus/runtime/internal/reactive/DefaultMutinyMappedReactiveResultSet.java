@@ -40,22 +40,30 @@ import org.reactivestreams.Subscriber;
 
 public class DefaultMutinyMappedReactiveResultSet<EntityT>
     implements MutinyMappedReactiveResultSet<EntityT> {
+
   private final Multi<EntityT> multi;
   private final Multi<ExecutionInfo> executionInfos;
   private final Multi<ColumnDefinitions> columnDefinitions;
   private final Multi<Boolean> wasApplied;
 
-  public DefaultMutinyMappedReactiveResultSet(MappedReactiveResultSet<EntityT> resultSet) {
-    multi = Wrappers.toMulti(resultSet);
-    @SuppressWarnings("unchecked")
-    Multi<ColumnDefinitions> columnDefinitions =
-        (Multi<ColumnDefinitions>) Wrappers.toMulti(resultSet.getColumnDefinitions());
-    this.columnDefinitions = columnDefinitions;
-    @SuppressWarnings("unchecked")
-    Multi<ExecutionInfo> executionInfos =
-        (Multi<ExecutionInfo>) Wrappers.toMulti(resultSet.getExecutionInfos());
+  @SuppressWarnings("unchecked")
+  public DefaultMutinyMappedReactiveResultSet(@NonNull MappedReactiveResultSet<EntityT> resultSet) {
+    this(
+        Wrappers.toMulti(resultSet),
+        (Multi<ExecutionInfo>) Wrappers.toMulti(resultSet.getExecutionInfos()),
+        (Multi<ColumnDefinitions>) Wrappers.toMulti(resultSet.getColumnDefinitions()),
+        Wrappers.toMulti(resultSet.wasApplied()));
+  }
+
+  public DefaultMutinyMappedReactiveResultSet(
+      @NonNull Multi<EntityT> multi,
+      @NonNull Multi<ExecutionInfo> executionInfos,
+      @NonNull Multi<ColumnDefinitions> columnDefinitions,
+      @NonNull Multi<Boolean> wasApplied) {
+    this.multi = multi;
     this.executionInfos = executionInfos;
-    wasApplied = Wrappers.toMulti(resultSet.wasApplied());
+    this.columnDefinitions = columnDefinitions;
+    this.wasApplied = wasApplied;
   }
 
   @NonNull

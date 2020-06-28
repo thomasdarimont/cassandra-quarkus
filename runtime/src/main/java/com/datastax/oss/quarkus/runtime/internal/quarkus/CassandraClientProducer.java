@@ -29,6 +29,7 @@ import com.datastax.oss.quarkus.runtime.api.config.CassandraClientConfig;
 import com.datastax.oss.quarkus.runtime.api.config.CassandraClientConnectionConfig;
 import com.datastax.oss.quarkus.runtime.api.session.QuarkusCqlSession;
 import com.datastax.oss.quarkus.runtime.internal.metrics.MetricsConfig;
+import com.datastax.oss.quarkus.runtime.internal.session.LazyQuarkusCqlSession;
 import com.datastax.oss.quarkus.runtime.internal.session.QuarkusCqlSessionBuilder;
 import com.typesafe.config.ConfigFactory;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -61,7 +62,11 @@ public class CassandraClientProducer {
             .withMetricRegistry(metricRegistry)
             .withQuarkusEventLoop(mainEventLoop)
             .withConfigLoader(configLoaderBuilder.build());
-    return builder.build();
+    if (config.eagerInit) {
+      return builder.build();
+    } else {
+      return new LazyQuarkusCqlSession(builder.buildAsync());
+    }
   }
 
   public void setCassandraClientConfig(CassandraClientConfig config) {
