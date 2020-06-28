@@ -15,6 +15,7 @@
  */
 package com.datastax.oss.quarkus.runtime.internal.quarkus;
 
+import com.datastax.oss.quarkus.runtime.api.config.CassandraClientConfig;
 import com.datastax.oss.quarkus.runtime.api.session.QuarkusCqlSession;
 import io.quarkus.runtime.StartupEvent;
 import javax.enterprise.context.Dependent;
@@ -34,8 +35,13 @@ public class CassandraClientStarter {
   private static final Logger LOG = LoggerFactory.getLogger(CassandraClientStarter.class);
 
   @SuppressWarnings("unused")
-  public void startup(@Observes StartupEvent event, QuarkusCqlSession session) {
-    LOG.debug("Triggering eager initialization of Quarkus session at startup");
-    session.getName();
+  public void startup(
+      @Observes StartupEvent event, QuarkusCqlSession session, CassandraClientConfig config) {
+    if (config.eagerInit) {
+      LOG.debug("Triggering eager initialization of Quarkus session at startup");
+      session.getName();
+    } else {
+      LOG.debug("Not triggering eager initialization of Quarkus session at startup");
+    }
   }
 }
