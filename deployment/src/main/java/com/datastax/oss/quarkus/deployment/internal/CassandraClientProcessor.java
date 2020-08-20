@@ -15,7 +15,7 @@
  */
 package com.datastax.oss.quarkus.deployment.internal;
 
-import static io.quarkus.deployment.annotations.ExecutionTime.RUNTIME_INIT;
+import static io.quarkus.deployment.annotations.ExecutionTime.*;
 
 import com.datastax.dse.driver.api.core.auth.ProgrammaticDseGssApiAuthProvider;
 import com.datastax.dse.driver.internal.core.auth.DseGssApiAuthProvider;
@@ -76,6 +76,7 @@ import java.util.Optional;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerIoRegistryV3d0;
 import org.reactivestreams.Publisher;
+import sun.security.provider.JavaKeyStore;
 
 class CassandraClientProcessor {
 
@@ -94,6 +95,15 @@ class CassandraClientProcessor {
         new ReflectiveClassBuildItem(true, true, TinkerIoRegistryV3d0.class.getName()),
         new ReflectiveClassBuildItem(true, true, JsonParser.class.getName()),
         new ReflectiveClassBuildItem(true, true, ObjectMapper.class.getName()));
+  }
+
+  @BuildStep
+  List<ReflectiveClassBuildItem> registerJavaKeyStore() {
+    return Arrays.asList(
+        new ReflectiveClassBuildItem(true, true, JavaKeyStore.class.getName()),
+        new ReflectiveClassBuildItem(true, true, JavaKeyStore.DualFormatJKS.class.getName()),
+        new ReflectiveClassBuildItem(true, true, JavaKeyStore.JKS.class.getName()),
+        new ReflectiveClassBuildItem(true, true, JavaKeyStore.CaseExactJKS.class.getName()));
   }
 
   @BuildStep
